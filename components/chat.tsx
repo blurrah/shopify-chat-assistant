@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useChat } from "@ai-sdk/react";
+import { useState } from "react";
 import {
 	AIConversation,
 	AIConversationContent,
@@ -20,7 +20,7 @@ export function Chat() {
 
 	const handleOpeningSubmit = (message: string) => {
 		setShowOpeningScreen(false);
-		sendMessage({ content: message });
+		sendMessage({ text: message });
 	};
 
 	if (showOpeningScreen) {
@@ -41,7 +41,7 @@ export function Chat() {
 									if (part.type === "text") {
 										return part.text;
 									}
-                                    return null;
+									return null;
 								})}
 							</AIMessageContent>
 						</AIMessage>
