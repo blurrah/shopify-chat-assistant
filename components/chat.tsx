@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import {
 	AIConversation,
@@ -11,9 +12,20 @@ import {
 	AIMessageContent,
 } from "@/components/ui/kibo-ui/ai/message";
 import { MessageInput } from "./message-input";
+import { OpeningScreen } from "./opening-screen";
 
 export function Chat() {
 	const { messages, sendMessage, status } = useChat();
+	const [showOpeningScreen, setShowOpeningScreen] = useState(true);
+
+	const handleOpeningSubmit = (message: string) => {
+		setShowOpeningScreen(false);
+		sendMessage({ content: message });
+	};
+
+	if (showOpeningScreen) {
+		return <OpeningScreen onSubmit={handleOpeningSubmit} />;
+	}
 
 	return (
 		<div>
