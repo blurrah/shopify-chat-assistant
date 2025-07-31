@@ -2,21 +2,9 @@
 
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-
-interface Product {
-  id: string;
-  title: string;
-  price: number;
-  currency?: string;
-  variantId?: string;
-  url?: string;
-  imageUrl?: string;
-  description?: string;
-}
-
-interface ProductCatalogData {
-  products?: Product[];
-}
+import type { Product, SearchShopCatalogOutput } from '@/lib/types';
+import { validateProductCatalogResult, safeValidateToolResult } from '@/lib/validation';
+import { shopifyToolSchemas } from '@/lib/types';
 
 interface ProductCatalogResultProps {
   data: unknown;
@@ -24,8 +12,12 @@ interface ProductCatalogResultProps {
 }
 
 export function ProductCatalogResult({ data, className }: ProductCatalogResultProps) {
-  const catalogData = data as ProductCatalogData;
-  const products = catalogData?.products || [];
+  const catalogData = safeValidateToolResult(
+    shopifyToolSchemas.searchShopCatalogOutput,
+    data,
+    { products: [] } as SearchShopCatalogOutput
+  );
+  const products = catalogData.products;
 
   if (products.length === 0) {
     return (

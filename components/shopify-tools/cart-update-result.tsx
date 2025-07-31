@@ -3,23 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { CheckCircleIcon, ShoppingCartIcon, PlusIcon, MinusIcon, XIcon } from 'lucide-react';
-
-interface UpdatedItem {
-  id: string;
-  title: string;
-  quantity: number;
-  action?: 'added' | 'updated' | 'removed';
-  previousQuantity?: number;
-}
-
-interface CartUpdateData {
-  success?: boolean;
-  message?: string;
-  cartId?: string;
-  updatedItems?: UpdatedItem[];
-  totalItems?: number;
-  checkoutUrl?: string;
-}
+import type { UpdateCartOutput } from '@/lib/types';
+import { safeValidateToolResult } from '@/lib/validation';
+import { shopifyToolSchemas } from '@/lib/types';
 
 interface CartUpdateResultProps {
   data: unknown;
@@ -27,8 +13,12 @@ interface CartUpdateResultProps {
 }
 
 export function CartUpdateResult({ data, className }: CartUpdateResultProps) {
-  const updateData = data as CartUpdateData;
-  const updatedItems = updateData?.updatedItems || [];
+  const updateData = safeValidateToolResult(
+    shopifyToolSchemas.updateCartOutput,
+    data,
+    { success: false } as UpdateCartOutput
+  );
+  const updatedItems = updateData.updatedItems || [];
   
   if (!updateData?.success) {
     return (

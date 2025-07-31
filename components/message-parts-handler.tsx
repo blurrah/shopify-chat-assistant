@@ -12,6 +12,8 @@ import {
   AIToolParameters,
   AIToolResult,
 } from '@/components/ui/kibo-ui/ai/tool';
+import { validateToolResult } from '@/lib/validation';
+import { shopifyToolSchemas } from '@/lib/types';
 
 interface MessagePartsHandlerProps {
   parts: UIMessagePart<any, any>[];
@@ -83,15 +85,41 @@ function renderShopifyToolResult(
     return <AIToolResult error={String(result)} />;
   }
 
+  // Validate the result before rendering
+  let validationResult;
   switch (toolName) {
     case 'search_shop_catalog':
+      validationResult = validateToolResult(shopifyToolSchemas.searchShopCatalogOutput, result);
+      if (!validationResult.success) {
+        console.warn(`Invalid ${toolName} result:`, validationResult.error);
+        return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
+      }
       return <ProductCatalogResult data={result} />;
+      
     case 'search_shop_policies_and_faqs':
+      validationResult = validateToolResult(shopifyToolSchemas.searchShopPoliciesFAQsOutput, result);
+      if (!validationResult.success) {
+        console.warn(`Invalid ${toolName} result:`, validationResult.error);
+        return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
+      }
       return <PolicyFAQResult data={result} />;
+      
     case 'get_cart':
+      validationResult = validateToolResult(shopifyToolSchemas.getCartOutput, result);
+      if (!validationResult.success) {
+        console.warn(`Invalid ${toolName} result:`, validationResult.error);
+        return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
+      }
       return <CartResult data={result} />;
+      
     case 'update_cart':
+      validationResult = validateToolResult(shopifyToolSchemas.updateCartOutput, result);
+      if (!validationResult.success) {
+        console.warn(`Invalid ${toolName} result:`, validationResult.error);
+        return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
+      }
       return <CartUpdateResult data={result} />;
+      
     default:
       return <AIToolResult result={<pre>{JSON.stringify(result, null, 2)}</pre>} />;
   }
