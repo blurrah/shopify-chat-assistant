@@ -31,8 +31,6 @@ export function MessagePartsHandler({ parts }: MessagePartsHandlerProps) {
 				if (part.type.startsWith("tool-")) {
 					const toolName = part.type.replace("tool-", "");
 
-          console.log(part.state)
-
 					// Check if this is a streaming tool call or completed
 					if ("state" in part) {
 						const status =
@@ -88,7 +86,6 @@ function renderShopifyToolResult(
 	result: unknown,
 	isError?: boolean,
 ): React.ReactNode {
-	console.log("result", result, toolName);
 	if (isError) {
 		return <AIToolResult error={String(result)} />;
 	}
@@ -96,8 +93,8 @@ function renderShopifyToolResult(
 	// Validate the result before rendering
 	switch (toolName) {
 		case "search_shop_catalog": {
+      // TODO: Fix this scuffed double parse
 			const parsedData = validateToolResult(McpToolOutputSchema, result);
-			console.log("parsedData", parsedData);
 			const validationResult = validateToolResult(
 				shopifyToolSchemas.searchShopCatalogOutput,
 				JSON.parse(parsedData.data?.content[0].text ?? "{}"),

@@ -12,7 +12,6 @@ interface ProductCatalogProps {
 }
 
 export function ProductCatalog({ data, className }: ProductCatalogProps) {
-	console.log("data", data);
 	const catalogData = safeValidateToolResult(
 		shopifyToolSchemas.searchShopCatalogOutput,
 		data,
