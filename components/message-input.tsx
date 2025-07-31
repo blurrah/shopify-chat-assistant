@@ -1,15 +1,8 @@
 "use client";
 import type { UseChatHelpers } from "@ai-sdk/react";
-import { GlobeIcon, MicIcon, PlusIcon } from "lucide-react";
 import { type FormEventHandler, useState } from "react";
 import {
 	AIInput,
-	AIInputButton,
-	AIInputModelSelect,
-	AIInputModelSelectContent,
-	AIInputModelSelectItem,
-	AIInputModelSelectTrigger,
-	AIInputModelSelectValue,
 	AIInputSubmit,
 	AIInputTextarea,
 	AIInputToolbar,
@@ -17,17 +10,6 @@ import {
 } from "@/components/ui/kibo-ui/ai/input";
 import type { ChatMessage } from "@/lib/types";
 
-const models = [
-	{ id: "gpt-4", name: "GPT-4" },
-	{ id: "gpt-3.5-turbo", name: "GPT-3.5 Turbo" },
-	{ id: "claude-2", name: "Claude 2" },
-	{ id: "claude-instant", name: "Claude Instant" },
-	{ id: "palm-2", name: "PaLM 2" },
-	{ id: "llama-2-70b", name: "Llama 2 70B" },
-	{ id: "llama-2-13b", name: "Llama 2 13B" },
-	{ id: "cohere-command", name: "Command" },
-	{ id: "mistral-7b", name: "Mistral 7B" },
-];
 export function MessageInput({
 	sendMessage,
 	status,
@@ -36,48 +18,36 @@ export function MessageInput({
 	sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
 }) {
 	const [text, setText] = useState<string>("");
-	const [model, setModel] = useState<string>(models[0].id);
+	
 	const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
 		event.preventDefault();
-		if (!text) {
+		if (!text.trim()) {
 			return;
 		}
 		sendMessage({
-			text,
+			text: text.trim(),
 			metadata: {
 				createdAt: new Date().toISOString(),
 			},
 		});
+		setText("");
 	};
+
 	return (
-		<AIInput onSubmit={handleSubmit}>
-			<AIInputTextarea onChange={(e) => setText(e.target.value)} value={text} />
-			<AIInputToolbar>
-				<AIInputTools>
-					<AIInputButton>
-						<PlusIcon size={16} />
-					</AIInputButton>
-					<AIInputButton>
-						<MicIcon size={16} />
-					</AIInputButton>
-					<AIInputButton>
-						<GlobeIcon size={16} />
-						<span>Search</span>
-					</AIInputButton>
-					<AIInputModelSelect onValueChange={setModel} value={model}>
-						<AIInputModelSelectTrigger>
-							<AIInputModelSelectValue />
-						</AIInputModelSelectTrigger>
-						<AIInputModelSelectContent>
-							{models.map((model) => (
-								<AIInputModelSelectItem key={model.id} value={model.id}>
-									{model.name}
-								</AIInputModelSelectItem>
-							))}
-						</AIInputModelSelectContent>
-					</AIInputModelSelect>
-				</AIInputTools>
-				<AIInputSubmit disabled={!text} status={status} />
+		<AIInput onSubmit={handleSubmit} className="border-0 bg-gray-50 rounded-xl">
+			<AIInputTextarea 
+				onChange={(e) => setText(e.target.value)} 
+				value={text}
+				placeholder="Ask about products, policies, or your cart..."
+				className="border-0 bg-transparent placeholder:text-gray-500 focus:ring-0 resize-none"
+			/>
+			<AIInputToolbar className="border-0 bg-transparent">
+				<AIInputTools />
+				<AIInputSubmit 
+					disabled={!text.trim()} 
+					status={status}
+					className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2"
+				/>
 			</AIInputToolbar>
 		</AIInput>
 	);

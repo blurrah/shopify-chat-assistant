@@ -5,13 +5,24 @@ export const messageMetadataSchema = z.object({
     createdAt: z.string(),
 })
 
+export const McpToolOutputSchema = z.object({
+    content: z.array(z.object({
+        type: z.enum(['text', 'tool-call']),
+        text: z.string(),
+    }))
+})
+
 // Product schema
 const productSchema = z.object({
-    id: z.string(),
+    product_id: z.string(),
     title: z.string(),
-    price: z.number(),
-    currency: z.string().optional(),
-    variantId: z.string().optional(),
+    variants: z.array(z.object({
+        variant_id: z.string(),
+        title: z.string(),
+        price: z.string(),
+        currency: z.string(),
+        image_url: z.string().optional(),
+    })),
     url: z.string().optional(),
     imageUrl: z.string().optional(),
     description: z.string().optional(),
@@ -87,7 +98,7 @@ const updateCartOutputSchema = z.object({
 // Tool schemas
 const searchShopCatalogToolSchema = z.object({
     input: searchQueryInputSchema,
-    output: searchShopCatalogOutputSchema,
+    output: McpToolOutputSchema,
 })
 
 const searchShopPoliciesFAQsToolSchema = z.object({
