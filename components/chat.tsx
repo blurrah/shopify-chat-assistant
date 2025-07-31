@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/kibo-ui/ai/message";
 import { MessageInput } from "./message-input";
 import { OpeningScreen } from "./opening-screen";
+import { MessagePartsHandler } from "./message-parts-handler";
 
 export function Chat() {
 	const { messages, sendMessage, status } = useChat();
@@ -37,12 +38,7 @@ export function Chat() {
 							key={message.id}
 						>
 							<AIMessageContent>
-								{message.parts.map((part) => {
-									if (part.type === "text") {
-										return part.text;
-									}
-									return null;
-								})}
+								<MessagePartsHandler parts={message.parts} />
 							</AIMessageContent>
 						</AIMessage>
 					))}
