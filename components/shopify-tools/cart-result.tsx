@@ -3,25 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { ShoppingCartIcon, ExternalLinkIcon } from 'lucide-react';
-
-interface CartItem {
-  id: string;
-  title: string;
-  quantity: number;
-  price: number;
-  currency?: string;
-  variantId?: string;
-  imageUrl?: string;
-}
-
-interface CartData {
-  id?: string;
-  items?: CartItem[];
-  totalQuantity?: number;
-  totalPrice?: number;
-  currency?: string;
-  checkoutUrl?: string;
-}
+import type { GetCartOutput } from '@/lib/types';
+import { safeValidateToolResult } from '@/lib/validation';
+import { shopifyToolSchemas } from '@/lib/types';
 
 interface CartResultProps {
   data: unknown;
@@ -29,8 +13,12 @@ interface CartResultProps {
 }
 
 export function CartResult({ data, className }: CartResultProps) {
-  const cartData = data as CartData;
-  const items = cartData?.items || [];
+  const cartData = safeValidateToolResult(
+    shopifyToolSchemas.getCartOutput,
+    data,
+    { id: '', items: [] } as GetCartOutput
+  );
+  const items = cartData.items;
   const isEmpty = items.length === 0;
 
   return (

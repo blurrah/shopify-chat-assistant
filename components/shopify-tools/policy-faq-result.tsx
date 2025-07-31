@@ -3,13 +3,9 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { HelpCircleIcon, FileTextIcon } from 'lucide-react';
-
-interface PolicyFAQData {
-  answer?: string;
-  type?: 'policy' | 'faq';
-  title?: string;
-  category?: string;
-}
+import type { SearchShopPoliciesFAQsOutput } from '@/lib/types';
+import { safeValidateToolResult } from '@/lib/validation';
+import { shopifyToolSchemas } from '@/lib/types';
 
 interface PolicyFAQResultProps {
   data: unknown;
@@ -17,7 +13,11 @@ interface PolicyFAQResultProps {
 }
 
 export function PolicyFAQResult({ data, className }: PolicyFAQResultProps) {
-  const policyData = data as PolicyFAQData;
+  const policyData = safeValidateToolResult(
+    shopifyToolSchemas.searchShopPoliciesFAQsOutput,
+    data,
+    { answer: '' } as SearchShopPoliciesFAQsOutput
+  );
   
   if (!policyData?.answer) {
     return (
