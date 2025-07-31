@@ -7,12 +7,12 @@ import type { SearchShopPoliciesFAQsOutput } from '@/lib/types';
 import { safeValidateToolResult } from '@/lib/validation';
 import { shopifyToolSchemas } from '@/lib/types';
 
-interface PolicyFAQResultProps {
+interface PolicyFAQProps {
   data: unknown;
   className?: string;
 }
 
-export function PolicyFAQResult({ data, className }: PolicyFAQResultProps) {
+export function PolicyFAQ({ data, className }: PolicyFAQProps) {
   const policyData = safeValidateToolResult(
     shopifyToolSchemas.searchShopPoliciesFAQsOutput,
     data,

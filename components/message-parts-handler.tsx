@@ -1,10 +1,10 @@
 'use client';
 
 import type { UIMessagePart } from 'ai';
-import { ProductCatalogResult } from './shopify-tools/product-catalog-result';
-import { PolicyFAQResult } from './shopify-tools/policy-faq-result';
-import { CartResult } from './shopify-tools/cart-result';
-import { CartUpdateResult } from './shopify-tools/cart-update-result';
+import { ProductCatalog } from './tools/product-catalog';
+import { PolicyFAQ } from './tools/policy-faq';
+import { Cart } from './tools/cart';
+import { CartUpdate } from './tools/cart-update';
 import {
   AITool,
   AIToolHeader,
@@ -94,7 +94,7 @@ function renderShopifyToolResult(
         console.warn(`Invalid ${toolName} result:`, validationResult.error);
         return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
       }
-      return <ProductCatalogResult data={result} />;
+      return <ProductCatalog data={result} />;
       
     case 'search_shop_policies_and_faqs':
       validationResult = validateToolResult(shopifyToolSchemas.searchShopPoliciesFAQsOutput, result);
@@ -102,7 +102,7 @@ function renderShopifyToolResult(
         console.warn(`Invalid ${toolName} result:`, validationResult.error);
         return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
       }
-      return <PolicyFAQResult data={result} />;
+      return <PolicyFAQ data={result} />;
       
     case 'get_cart':
       validationResult = validateToolResult(shopifyToolSchemas.getCartOutput, result);
@@ -110,7 +110,7 @@ function renderShopifyToolResult(
         console.warn(`Invalid ${toolName} result:`, validationResult.error);
         return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
       }
-      return <CartResult data={result} />;
+      return <Cart data={result} />;
       
     case 'update_cart':
       validationResult = validateToolResult(shopifyToolSchemas.updateCartOutput, result);
@@ -118,7 +118,7 @@ function renderShopifyToolResult(
         console.warn(`Invalid ${toolName} result:`, validationResult.error);
         return <AIToolResult error={`Invalid tool result: ${validationResult.error}`} />;
       }
-      return <CartUpdateResult data={result} />;
+      return <CartUpdate data={result} />;
       
     default:
       return <AIToolResult result={<pre>{JSON.stringify(result, null, 2)}</pre>} />;
