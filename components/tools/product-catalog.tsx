@@ -3,15 +3,15 @@
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Product, SearchShopCatalogOutput } from '@/lib/types';
-import { validateProductCatalogResult, safeValidateToolResult } from '@/lib/validation';
+import { safeValidateToolResult } from '@/lib/validation';
 import { shopifyToolSchemas } from '@/lib/types';
 
-interface ProductCatalogResultProps {
+interface ProductCatalogProps {
   data: unknown;
   className?: string;
 }
 
-export function ProductCatalogResult({ data, className }: ProductCatalogResultProps) {
+export function ProductCatalog({ data, className }: ProductCatalogProps) {
   const catalogData = safeValidateToolResult(
     shopifyToolSchemas.searchShopCatalogOutput,
     data,

@@ -7,12 +7,12 @@ import type { UpdateCartOutput } from '@/lib/types';
 import { safeValidateToolResult } from '@/lib/validation';
 import { shopifyToolSchemas } from '@/lib/types';
 
-interface CartUpdateResultProps {
+interface CartUpdateProps {
   data: unknown;
   className?: string;
 }
 
-export function CartUpdateResult({ data, className }: CartUpdateResultProps) {
+export function CartUpdate({ data, className }: CartUpdateProps) {
   const updateData = safeValidateToolResult(
     shopifyToolSchemas.updateCartOutput,
     data,
