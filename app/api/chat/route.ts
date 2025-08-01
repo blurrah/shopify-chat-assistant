@@ -1,23 +1,44 @@
 import { NextRequest } from "next/server";
-import { convertToModelMessages, stepCountIs, streamText } from "ai";
+import { convertToModelMessages, stepCountIs, streamText, ToolSet } from "ai";
 import { experimental_createMCPClient as createMCPClient } from "ai";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { systemPrompt } from "@/lib/ai";
+import { z } from "zod";
 
-// Helper function to wrap MCP tools and auto-parse JSON responses
-function wrapMCPTools(mcpTools: Record<string, any>) {
-    const wrappedTools: Record<string, any> = {};
+interface ToolDef {
+    description: string;
+    parameters: Record<string, unknown>;
+    execute: (params: unknown) => Promise<McpToolOutput>;
+}
+
+// This just parses the output schema for the MCP tools pre-parsed
+const mcpToolOutputSchema = z.object({
+    content: z.array(z.object({
+        type: z.enum(["text", "tool-call"]),
+        text: z.string(),
+    })),
+})
+
+type McpToolOutput = z.infer<typeof mcpToolOutputSchema>;
+
+/**
+ * Wraps Shopify MCP tools and auto-parses JSON responses
+ * @param mcpTools MCP tools
+ * @returns Wrapped tools
+ */
+function wrapMCPTools(mcpTools: Record<string, ToolDef>) {
+    const wrappedTools: Record<string, ToolDef> = {};
     
     for (const [toolName, toolDef] of Object.entries(mcpTools)) {
         const originalExecute = toolDef.execute;
         wrappedTools[toolName] = {
-            description: toolDef.description,
-            parameters: toolDef.parameters,
-            execute: async (params: any) => {
+           ...toolDef,
+            execute: async (params: unknown) => {
                 const result = await originalExecute(params);
-                
-                // Check if result has the MCP format with content array
-                if (result?.content && Array.isArray(result.content) && result.content[0]?.text) {
+
+                const parsedResult = mcpToolOutputSchema.safeParse(result);
+
+                if (parsedResult.success) {
                     try {
                         // Try to parse the JSON string
                         const parsedContent = JSON.parse(result.content[0].text);
