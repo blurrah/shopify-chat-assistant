@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 interface OpeningScreenProps {
 	onSubmit: (message: string) => void;
@@ -58,23 +58,6 @@ export function OpeningScreen({ onSubmit }: OpeningScreenProps) {
 					</form>
 				</div>
 
-				{/* Product Images Placeholder */}
-				<div className="flex justify-center items-end space-x-3 sm:space-x-6 mt-12 sm:mt-20">
-					{Array.from({ length: 5 }).map((_, i) => (
-						<div
-							key={i}
-							className="bg-gray-100 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all hover:-translate-y-2"
-							style={{
-								width: i === 2 ? '100px' : '70px',
-								height: i === 2 ? '130px' : '90px',
-							}}
-						>
-							<div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-								<Sparkles className="w-8 h-8 text-gray-400" />
-							</div>
-						</div>
-					))}
-				</div>
 			</div>
 		</div>
 	);
