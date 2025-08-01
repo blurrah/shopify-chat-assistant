@@ -32,16 +32,16 @@ export function Chat() {
 	return (
 		<div className="flex flex-col h-screen bg-gray-50">
 			{/* Header */}
-			<header className="bg-white border-b border-gray-200 px-6 py-4">
+			<header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
 				<div className="max-w-4xl mx-auto flex items-center justify-between">
 					<div className="flex items-center gap-3">
-						<h1 className="text-xl font-semibold text-gray-900">Shop AI</h1>
+						<h1 className="text-lg sm:text-xl font-semibold text-gray-900">Shop AI</h1>
 						<div className="flex gap-1">
 							<div className="w-2 h-2 bg-green-500 rounded-full"></div>
 							<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
 						</div>
 					</div>
-					<div className="text-sm text-gray-500">
+					<div className="text-sm text-gray-500 hidden sm:block">
 						{messages.length} messages
 					</div>
 				</div>
@@ -49,7 +49,7 @@ export function Chat() {
 
 			{/* Chat Content */}
 			<AIConversation className="flex-1 relative">
-				<AIConversationContent className="max-w-4xl mx-auto px-6">
+				<AIConversationContent className="max-w-4xl mx-auto px-4 sm:px-6">
 					{messages.map((message) => (
 						<AIMessage
 							from={message.role === "system" ? "assistant" : message.role}
@@ -65,7 +65,7 @@ export function Chat() {
 			</AIConversation>
 
 			{/* Footer */}
-			<footer className="bg-white border-t border-gray-200 px-6 py-4">
+			<footer className="bg-white border-t border-gray-200 px-4 sm:px-6 py-4">
 				<div className="max-w-4xl mx-auto">
 					<MessageInput sendMessage={sendMessage} status={status} />
 				</div>
