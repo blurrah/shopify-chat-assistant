@@ -8,7 +8,7 @@ import {
 	AIToolParameters,
 	AIToolResult,
 } from "@/components/ui/kibo-ui/ai/tool";
-import { type ChatTools, McpToolOutputSchema, shopifyToolSchemas } from "@/lib/types";
+import { type ChatTools, shopifyToolSchemas } from "@/lib/types";
 import { validateToolResult } from "@/lib/validation";
 import { Cart } from "./tools/cart";
 import { CartUpdate } from "./tools/cart-update";
@@ -93,11 +93,9 @@ function renderShopifyToolResult(
 	// Validate the result before rendering
 	switch (toolName) {
 		case "search_shop_catalog": {
-      // TODO: Fix this scuffed double parse
-			const parsedData = validateToolResult(McpToolOutputSchema, result);
 			const validationResult = validateToolResult(
 				shopifyToolSchemas.searchShopCatalogOutput,
-				JSON.parse(parsedData.data?.content[0].text ?? "{}"),
+				result,
 			);
 			if (!validationResult.success) {
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
@@ -107,7 +105,7 @@ function renderShopifyToolResult(
 					/>
 				);
 			}
-			return <ProductCatalog data={validationResult.data} />;
+			return <ProductCatalog data={result} />;
 		}
 
 		case "search_shop_policies_and_faqs": {

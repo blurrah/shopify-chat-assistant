@@ -98,7 +98,7 @@ const updateCartOutputSchema = z.object({
 // Tool schemas
 const searchShopCatalogToolSchema = z.object({
     input: searchQueryInputSchema,
-    output: McpToolOutputSchema,
+    output: searchShopCatalogOutputSchema,
 })
 
 const searchShopPoliciesFAQsToolSchema = z.object({
