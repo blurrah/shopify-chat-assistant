@@ -35,7 +35,9 @@ export function Chat() {
 			<header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
 				<div className="max-w-4xl mx-auto flex items-center justify-between">
 					<div className="flex items-center gap-3">
-						<h1 className="text-lg sm:text-xl font-semibold text-gray-900">Shop AI</h1>
+						<h1 className="text-lg sm:text-xl font-semibold text-gray-900">
+							Shopify AI Assistant
+						</h1>
 						<div className="flex gap-1">
 							<div className="w-2 h-2 bg-green-500 rounded-full"></div>
 							<div className="w-2 h-2 bg-blue-500 rounded-full"></div>

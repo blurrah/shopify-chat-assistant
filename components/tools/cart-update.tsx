@@ -9,9 +9,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import type { UpdateCartOutput } from "@/lib/types";
-import { shopifyToolSchemas } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { safeValidateToolResult } from "@/lib/validation";
 
 interface CartUpdateProps {
 	data: UpdateCartOutput;

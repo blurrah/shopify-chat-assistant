@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useState } from "react";
 
 interface OpeningScreenProps {
 	onSubmit: (message: string) => void;
@@ -23,7 +23,7 @@ export function OpeningScreen({ onSubmit }: OpeningScreenProps) {
 				{/* Header */}
 				<div className="flex items-center justify-center mb-12 sm:mb-20">
 					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mr-3">
-						Shop AI
+						Shopify AI Assistant
 					</h1>
 					<div className="flex gap-1.5">
 						<div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
@@ -35,8 +35,10 @@ export function OpeningScreen({ onSubmit }: OpeningScreenProps) {
 
 				{/* Main Content */}
 				<div className="text-center mb-8 sm:mb-12">
-					<p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8">Tell us what you're looking for</p>
-					
+					<p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8">
+						Tell us what you're looking for
+					</p>
+
 					<form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
 						<div className="relative">
 							<input
@@ -57,7 +59,6 @@ export function OpeningScreen({ onSubmit }: OpeningScreenProps) {
 						</div>
 					</form>
 				</div>
-
 			</div>
 		</div>
 	);
