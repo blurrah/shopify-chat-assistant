@@ -138,7 +138,7 @@ function renderShopifyToolResult(
 					/>
 				);
 			}
-			return <Cart data={result} />;
+			return <Cart data={validationResult.data} />;
 		}
 
 		case "update_cart": {
