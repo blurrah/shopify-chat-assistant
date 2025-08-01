@@ -129,6 +129,7 @@ function renderShopifyToolResult(
 				shopifyToolSchemas.getCartOutput,
 				result,
 			);
+			console.log("result", result);
 			if (!validationResult.success) {
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
 				return (
@@ -153,7 +154,7 @@ function renderShopifyToolResult(
 					/>
 				);
 			}
-			return <CartUpdate data={result} />;
+			return <CartUpdate data={validationResult.data} />;
 		}
 
 		default:

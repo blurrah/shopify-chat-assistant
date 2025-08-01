@@ -1,4 +1,4 @@
-import { UIDataTypes, UIMessage } from "ai";
+import type { UIDataTypes, UIMessage } from "ai";
 import { z } from "zod";
 
 export const messageMetadataSchema = z.object({
@@ -48,6 +48,8 @@ const updatedCartItemSchema = z.object({
     previousQuantity: z.number().optional(),
 })
 
+
+
 // Input schemas
 const searchQueryInputSchema = z.object({
     query: z.string(),
@@ -77,22 +79,65 @@ const searchShopPoliciesFAQsOutputSchema = z.object({
     category: z.string().optional(),
 })
 
-const getCartOutputSchema = z.object({
+
+
+const shopifyCartSchema = z.object({
     id: z.string(),
-    items: z.array(cartItemSchema),
-    totalQuantity: z.number().optional(),
-    totalPrice: z.number().optional(),
-    currency: z.string().optional(),
-    checkoutUrl: z.string().optional(),
+    created_at: z.string(),
+    updated_at: z.string(),
+    lines: z.array(z.object({
+        id: z.string(),
+        quantity: z.number(),
+        cost: z.object({
+            total_amount: z.object({
+                amount: z.string(),
+                currency: z.string(),
+            }),
+            subtotal_amount: z.object({
+                amount: z.string(),
+                currency: z.string(),
+            }),
+        }),
+        merchandise: z.object({
+            id: z.string(),
+            title: z.string(),
+            product: z.object({
+                id: z.string(),
+                title: z.string(),
+            }),
+        }),
+    })),
+    delivery: z.record(z.string(), z.any()),
+    discounts: z.record(z.string(), z.any()),
+    gift_cards: z.array(z.any()),
+    cost: z.object({
+        total_amount: z.object({
+            amount: z.string(),
+            currency: z.string(),
+        }),
+        subtotal_amount: z.object({
+            amount: z.string(),
+            currency: z.string(),
+        }),
+        total_tax_amount: z.object({
+            amount: z.string(),
+            currency: z.string(),
+        }),
+    }),
+    total_quantity: z.number(),
+    checkout_url: z.string(),
+})
+
+const getCartOutputSchema = z.object({
+    instructions: z.string(),
+    cart: shopifyCartSchema,
+    errors: z.array(z.string()),
 })
 
 const updateCartOutputSchema = z.object({
-    success: z.boolean(),
-    message: z.string().optional(),
-    cartId: z.string().optional(),
-    updatedItems: z.array(updatedCartItemSchema).optional(),
-    totalItems: z.number().optional(),
-    checkoutUrl: z.string().optional(),
+    instructions: z.string(),
+    cart: shopifyCartSchema,
+    errors: z.array(z.string()),
 })
 
 // Tool schemas

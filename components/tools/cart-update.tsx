@@ -1,133 +1,113 @@
-'use client';
+"use client";
 
-import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { CheckCircleIcon, ShoppingCartIcon, PlusIcon, MinusIcon, XIcon } from 'lucide-react';
-import type { UpdateCartOutput } from '@/lib/types';
-import { safeValidateToolResult } from '@/lib/validation';
-import { shopifyToolSchemas } from '@/lib/types';
+import {
+	CheckCircleIcon,
+	MinusIcon,
+	PlusIcon,
+	ShoppingCartIcon,
+	XIcon,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import type { UpdateCartOutput } from "@/lib/types";
+import { shopifyToolSchemas } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { safeValidateToolResult } from "@/lib/validation";
 
 interface CartUpdateProps {
-  data: unknown;
-  className?: string;
+	data: UpdateCartOutput;
+	className?: string;
 }
 
 export function CartUpdate({ data, className }: CartUpdateProps) {
-  const updateData = safeValidateToolResult(
-    shopifyToolSchemas.updateCartOutput,
-    data,
-    { success: false } as UpdateCartOutput
-  );
-  const updatedItems = updateData.updatedItems || [];
-  
-  if (!updateData?.success) {
-    return (
-      <div className={cn('text-destructive text-sm', className)}>
-        Cart update failed: {updateData?.message || 'Unknown error'}
-      </div>
-    );
-  }
+	const updatedItems = data.cart.lines || [];
 
-  return (
-    <div className={cn('space-y-4', className)}>
-      <div className="flex items-center gap-2">
-        <CheckCircleIcon className="size-4 text-green-600" />
-        <h4 className="font-medium text-sm">Cart Updated Successfully</h4>
-        {updateData.totalItems && (
-          <Badge variant="secondary">{updateData.totalItems} total items</Badge>
-        )}
-      </div>
+	return (
+		<div className={cn("space-y-4", className)}>
+			<div className="flex items-center gap-2">
+				<CheckCircleIcon className="size-4 text-green-600" />
+				<h4 className="font-medium text-sm">Cart Updated Successfully</h4>
+				{data.cart.total_quantity && (
+					<Badge variant="secondary">
+						{data.cart.total_quantity} total items
+					</Badge>
+				)}
+			</div>
+			{updatedItems.length > 0 && (
+				<div className="space-y-2">
+					<h5 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+						Changes Made
+					</h5>
 
-      {updateData.message && (
-        <p className="text-sm text-muted-foreground">{updateData.message}</p>
-      )}
+					<div className="grid gap-2">
+						{updatedItems.map((item) => {
+							const ActionIcon = getActionIcon("added");
+							const actionColor = getActionColor("added");
 
-      {updatedItems.length > 0 && (
-        <div className="space-y-2">
-          <h5 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            Changes Made
-          </h5>
-          
-          <div className="grid gap-2">
-            {updatedItems.map((item) => {
-              const ActionIcon = getActionIcon(item.action);
-              const actionColor = getActionColor(item.action);
-              
-              return (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-3 rounded-lg border p-2 bg-muted/20"
-                >
-                  <ActionIcon className={cn('size-4', actionColor)} />
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm truncate">{item.title}</p>
-                    
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      {item.action === 'added' && (
-                        <span>Added {item.quantity} items</span>
-                      )}
-                      {item.action === 'updated' && (
-                        <span>
-                          Updated quantity: {item.previousQuantity} → {item.quantity}
-                        </span>
-                      )}
-                      {item.action === 'removed' && (
-                        <span>Removed from cart</span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <Badge 
-                    variant="outline" 
-                    className={cn('text-xs', actionColor)}
-                  >
-                    {item.action || 'updated'}
-                  </Badge>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+							return (
+								<div
+									key={item.id}
+									className="flex items-center gap-3 rounded-lg border p-2 bg-muted/20"
+								>
+									<ActionIcon className={cn("size-4", actionColor)} />
 
-      {updateData.checkoutUrl && (
-        <div className="pt-2 border-t">
-          <a
-            href={updateData.checkoutUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md px-3 py-2 text-sm transition-colors"
-          >
-            <ShoppingCartIcon className="size-4" />
-            View Updated Cart
-          </a>
-        </div>
-      )}
-    </div>
-  );
+									<div className="flex-1 min-w-0">
+										<p className="font-medium text-sm truncate">
+											{item.merchandise.product.title}
+										</p>
+
+										<div className="flex items-center gap-2 text-xs text-muted-foreground">
+											<span>Added {item.quantity} items</span>
+										</div>
+									</div>
+
+									<Badge
+										variant="outline"
+										className={cn("text-xs", actionColor)}
+									>
+										Added
+									</Badge>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			)}
+
+			{data.cart.checkout_url && (
+				<div className="pt-2 border-t">
+					<a
+						href={data.cart.checkout_url}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="flex items-center justify-center gap-2 w-full bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md px-3 py-2 text-sm transition-colors"
+					>
+						<ShoppingCartIcon className="size-4" />
+						View Updated Cart
+					</a>
+				</div>
+			)}
+		</div>
+	);
 }
 
 function getActionIcon(action?: string) {
-  switch (action) {
-    case 'added':
-      return PlusIcon;
-    case 'removed':
-      return XIcon;
-    case 'updated':
-    default:
-      return MinusIcon;
-  }
+	switch (action) {
+		case "added":
+			return PlusIcon;
+		case "removed":
+			return XIcon;
+		default:
+			return MinusIcon;
+	}
 }
 
 function getActionColor(action?: string) {
-  switch (action) {
-    case 'added':
-      return 'text-green-600';
-    case 'removed':
-      return 'text-red-600';
-    case 'updated':
-    default:
-      return 'text-blue-600';
-  }
+	switch (action) {
+		case "added":
+			return "text-green-600";
+		case "removed":
+			return "text-red-600";
+		default:
+			return "text-blue-600";
+	}
 }

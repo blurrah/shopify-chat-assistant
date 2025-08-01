@@ -1,5 +1,5 @@
-import { NextRequest } from "next/server";
-import { convertToModelMessages, stepCountIs, streamText, ToolSet } from "ai";
+import type { NextRequest } from "next/server";
+import { convertToModelMessages, stepCountIs, streamText } from "ai";
 import { experimental_createMCPClient as createMCPClient } from "ai";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { systemPrompt } from "@/lib/ai";
@@ -69,7 +69,9 @@ export async function POST(req: NextRequest) {
     })
 
     const mcpTools = await mcpClient.tools()
-    const tools = wrapMCPTools(mcpTools)
+    
+    // TODO: Fix typing here
+    const tools = wrapMCPTools(mcpTools as unknown as Record<string, ToolDef>)
 
     const result = streamText({
         model: "openai/gpt-4o",
