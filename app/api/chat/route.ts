@@ -130,6 +130,7 @@ export async function POST(req: NextRequest) {
 			writer.merge(result.toUIMessageStream({ sendReasoning: true }));
 		},
 	});
+    // This doesn't do much yet as there's no persistence but still
 	const streamContext = getStreamContext();
 
 	if (streamContext) {
