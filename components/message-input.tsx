@@ -1,6 +1,7 @@
 "use client";
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { type FormEventHandler, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import {
 	AIInput,
 	AIInputSubmit,
@@ -33,21 +34,39 @@ export function MessageInput({
 		setText("");
 	};
 
+	const handleKeyDown = (event: React.KeyboardEvent) => {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault();
+			if (text.trim()) {
+				sendMessage({
+					text: text.trim(),
+					metadata: {
+						createdAt: new Date().toISOString(),
+					},
+				});
+				setText("");
+			}
+		}
+	};
+
 	return (
-		<AIInput onSubmit={handleSubmit} className="border-0 bg-gray-50 rounded-xl">
+		<AIInput onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
 			<AIInputTextarea
 				onChange={(e) => setText(e.target.value)}
+				onKeyDown={handleKeyDown}
 				value={text}
 				placeholder="Ask about products, policies, or your cart..."
-				className="border-0 bg-transparent placeholder:text-gray-500 focus:ring-0 resize-none"
+				className="border-0 bg-transparent placeholder:text-gray-500 focus:ring-0 resize-none px-4 py-3 !text-[17px]"
 			/>
-			<AIInputToolbar className="border-0 bg-transparent">
+			<AIInputToolbar className="border-0 bg-transparent px-2 pb-2">
 				<AIInputTools />
 				<AIInputSubmit
 					disabled={!text.trim()}
 					status={status}
-					className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-2"
-				/>
+					className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg p-2 transition-all hover:scale-105"
+				>
+					<ArrowRight className="w-4 h-4" />
+				</AIInputSubmit>
 			</AIInputToolbar>
 		</AIInput>
 	);

@@ -119,7 +119,7 @@ export function Chat() {
 			</AIConversation>
 
 			{/* Footer */}
-			<footer className="bg-white border-t border-gray-200 px-4 sm:px-6 py-4">
+			<footer className="bg-gray-50 px-4 sm:px-6 py-6">
 				<div className="max-w-4xl mx-auto">
 					<MessageInput sendMessage={sendMessage} status={status} />
 				</div>
