@@ -44,9 +44,14 @@ export function MessagePartsHandler({ parts }: MessagePartsHandlerProps) {
 						// Set catalog tool to be closed by default
 						const defaultOpen = toolName !== "search_shop_catalog";
 
+						const hasCarousel = toolName === "search_shop_catalog" && 
+											"output" in part && 
+											part.output && 
+											status === "completed";
+
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
-							<div key={index}>
+							<div key={index} className={hasCarousel ? "has-carousel" : ""}>
 								{/* AI Tool for debugging */}
 								<AITool defaultOpen={defaultOpen}>
 									<AIToolHeader
@@ -68,10 +73,7 @@ export function MessagePartsHandler({ parts }: MessagePartsHandlerProps) {
 								</AITool>
 								
 								{/* Add carousel for catalog results */}
-								{toolName === "search_shop_catalog" && 
-								 "output" in part && 
-								 part.output && 
-								 status === "completed" && (
+								{hasCarousel && (
 									<div className="mt-4">
 										<ProductCarousel data={part.output} />
 									</div>

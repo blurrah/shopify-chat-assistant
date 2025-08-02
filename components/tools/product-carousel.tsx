@@ -41,7 +41,7 @@ export function ProductCarousel({ data, className }: ProductCarouselProps) {
 				opts={{
 					align: "start",
 				}}
-				className="w-full"
+				className="w-full mr-4"
 			>
 				<CarouselContent>
 					{products.map((product) => (
