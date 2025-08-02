@@ -15,35 +15,37 @@ import type { ChatMessage } from "@/lib/types";
 import { MessageInput } from "./message-input";
 import { MessagePartsHandler } from "./message-parts-handler";
 import { OpeningScreen } from "./opening-screen";
+import { SessionList } from "./session-list";
 import { useChatPersistence } from "@/hooks/use-chat-persistence";
 
 export function Chat() {
 	const { messages, sendMessage, status, setMessages } = useChat<ChatMessage>();
 	const [showOpeningScreen, setShowOpeningScreen] = useState(true);
 	const { 
+		sessionId,
 		isLoading: isPersistenceLoading, 
 		saveMessages, 
-		loadMessages 
+		loadMessages,
+		startNewSession,
+		loadSession
 	} = useChatPersistence();
 
-	// Load persisted messages on component mount
+	// Load persisted messages when session changes
 	useEffect(() => {
 		const loadPersistedMessages = async () => {
-			if (isPersistenceLoading) return;
+			if (isPersistenceLoading || !sessionId) return;
 			
 			try {
 				const persistedMessages = await loadMessages();
-				if (persistedMessages.length > 0) {
-					setMessages(persistedMessages);
-					setShowOpeningScreen(false);
-				}
+				setMessages(persistedMessages);
+				setShowOpeningScreen(persistedMessages.length === 0);
 			} catch (error) {
 				console.error('Failed to load persisted messages:', error);
 			}
 		};
 
 		loadPersistedMessages();
-	}, [isPersistenceLoading, loadMessages, setMessages]);
+	}, [sessionId, isPersistenceLoading, loadMessages, setMessages]);
 
 	// Save messages whenever they change
 	useEffect(() => {
@@ -55,6 +57,17 @@ export function Chat() {
 	const handleOpeningSubmit = (message: string) => {
 		setShowOpeningScreen(false);
 		sendMessage({ text: message });
+	};
+
+	const handleNewSession = () => {
+		startNewSession();
+		setMessages([]);
+		setShowOpeningScreen(true);
+	};
+
+	const handleSessionSelect = (targetSessionId: string) => {
+		if (targetSessionId === sessionId) return;
+		loadSession(targetSessionId);
 	};
 
 	if (showOpeningScreen) {
@@ -75,8 +88,15 @@ export function Chat() {
 							<div className="w-2 h-2 bg-blue-500 rounded-full"></div>
 						</div>
 					</div>
-					<div className="text-sm text-gray-500 hidden sm:block">
-						{messages.length} messages
+					<div className="flex items-center gap-4">
+						<SessionList
+							currentSessionId={sessionId}
+							onSessionSelect={handleSessionSelect}
+							onNewSession={handleNewSession}
+						/>
+						<div className="text-sm text-gray-500 hidden sm:block">
+							{messages.length} messages
+						</div>
 					</div>
 				</div>
 			</header>
