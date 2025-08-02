@@ -22,21 +22,15 @@ export function OpeningScreen({ onSubmit }: OpeningScreenProps) {
 			<div className="w-full max-w-4xl mx-auto">
 				{/* Header */}
 				<div className="flex items-center justify-center mb-12 sm:mb-20">
-					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mr-3">
+					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
 						Shopify AI Assistant
 					</h1>
-					<div className="flex gap-1.5">
-						<div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse"></div>
-						<div className="w-3 h-3 bg-green-500 rounded-full animate-pulse delay-75"></div>
-						<div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse delay-150"></div>
-						<div className="w-3 h-3 bg-red-500 rounded-full animate-pulse delay-300"></div>
-					</div>
 				</div>
 
 				{/* Main Content */}
 				<div className="text-center mb-8 sm:mb-12">
 					<p className="text-lg sm:text-xl text-gray-600 mb-6 sm:mb-8">
-						Tell us what you're looking for
+						How can I help you shop today?
 					</p>
 
 					<form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
