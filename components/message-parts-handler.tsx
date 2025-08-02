@@ -14,6 +14,7 @@ import { Cart } from "./tools/cart";
 import { CartUpdate } from "./tools/cart-update";
 import { PolicyFAQ } from "./tools/policy-faq";
 import { ProductCatalog } from "./tools/product-catalog";
+import { ProductCarousel } from "./tools/product-carousel";
 
 interface MessagePartsHandlerProps {
 	parts: UIMessagePart<UIDataTypes, ChatTools>[];
@@ -40,26 +41,42 @@ export function MessagePartsHandler({ parts }: MessagePartsHandlerProps) {
 									? "error"
 									: "running";
 
+						// Set catalog tool to be closed by default
+						const defaultOpen = toolName !== "search_shop_catalog";
+
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
-							<AITool key={index} defaultOpen>
-								<AIToolHeader
-									status={status}
-									name={toolName}
-									description={getToolDescription(toolName)}
-								/>
-								<AIToolContent>
-									{"input" in part && part.input && (
-										<AIToolParameters parameters={part.input} />
-									)}
-									{"output" in part &&
-										part.output &&
-										renderShopifyToolResult(toolName, part.output, false)}
-									{"errorText" in part && part.errorText && (
-										<AIToolResult error={part.errorText} />
-									)}
-								</AIToolContent>
-							</AITool>
+							<div key={index}>
+								{/* AI Tool for debugging */}
+								<AITool defaultOpen={defaultOpen}>
+									<AIToolHeader
+										status={status}
+										name={toolName}
+										description={getToolDescription(toolName)}
+									/>
+									<AIToolContent>
+										{"input" in part && part.input && (
+											<AIToolParameters parameters={part.input} />
+										)}
+										{"output" in part &&
+											part.output &&
+											renderShopifyToolResult(toolName, part.output, false)}
+										{"errorText" in part && part.errorText && (
+											<AIToolResult error={part.errorText} />
+										)}
+									</AIToolContent>
+								</AITool>
+								
+								{/* Add carousel for catalog results */}
+								{toolName === "search_shop_catalog" && 
+								 "output" in part && 
+								 part.output && 
+								 status === "completed" && (
+									<div className="mt-4">
+										<ProductCarousel data={part.output} />
+									</div>
+								)}
+							</div>
 						);
 					}
 				}
