@@ -17,6 +17,17 @@ export function SessionList({ currentSessionId, onSessionSelect, onNewSession }:
   const [isOpen, setIsOpen] = useState(false);
   const { getAllSessions, deleteCurrentSession } = useChatPersistence();
 
+  // Load sessions on mount and when currentSessionId changes
+  useEffect(() => {
+    const loadSessions = async () => {
+      const allSessions = await getAllSessions();
+      setSessions(allSessions);
+    };
+    
+    loadSessions();
+  }, [getAllSessions, currentSessionId]);
+
+  // Also load when dropdown opens to ensure fresh data
   useEffect(() => {
     const loadSessions = async () => {
       const allSessions = await getAllSessions();
