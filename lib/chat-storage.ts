@@ -116,13 +116,6 @@ class ChatStorage {
   }
 
   private generateSessionTitle(messages: ChatMessage[]): string {
-    const userMessage = messages.find(m => m.role === 'user');
-    if (userMessage?.content) {
-      const text = typeof userMessage.content === 'string' 
-        ? userMessage.content 
-        : userMessage.content;
-      return text.toString().slice(0, 50) + (text.toString().length > 50 ? '...' : '');
-    }
     return `Chat ${new Date().toLocaleDateString()}`;
   }
 }
