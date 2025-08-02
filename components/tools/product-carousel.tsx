@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
 	Carousel,
 	CarouselContent,
@@ -16,9 +17,10 @@ import { safeValidateToolResult } from "@/lib/validation";
 interface ProductCarouselProps {
 	data: unknown;
 	className?: string;
+	sendMessage: (message: { text: string }) => void;
 }
 
-export function ProductCarousel({ data, className }: ProductCarouselProps) {
+export function ProductCarousel({ data, className, sendMessage }: ProductCarouselProps) {
 	const catalogData = safeValidateToolResult(
 		shopifyToolSchemas.searchShopCatalogOutput,
 		data,
@@ -46,7 +48,7 @@ export function ProductCarousel({ data, className }: ProductCarouselProps) {
 				<CarouselContent>
 					{products.map((product) => (
 						<CarouselItem key={product.product_id} className="md:basis-1/2 lg:basis-1/3">
-							<div className="rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full">
+							<div className="rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full flex flex-col">
 								{product.variants[0].image_url && (
 									<img
 										src={product.variants[0].image_url}
@@ -55,7 +57,7 @@ export function ProductCarousel({ data, className }: ProductCarouselProps) {
 									/>
 								)}
 
-								<div className="space-y-2">
+								<div className="space-y-2 flex-1 flex flex-col">
 									<h5 className="font-medium text-sm line-clamp-2">{product.title}</h5>
 
 									<div className="flex items-center justify-between">
@@ -71,16 +73,28 @@ export function ProductCarousel({ data, className }: ProductCarouselProps) {
 										</p>
 									)}
 
-									{product.url && (
-										<a
-											href={product.url}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-primary hover:underline text-sm font-medium inline-block"
+									<div className="flex flex-col gap-2 mt-auto">
+										{product.url && (
+											<a
+												href={product.url}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="text-primary hover:underline text-sm font-medium inline-block"
+											>
+												View Product →
+											</a>
+										)}
+										<Button
+											size="sm"
+											className="w-full"
+											onClick={() => {
+												const message = `Add "${product.title}" to my cart (variant: ${product.variants[0].variant_id})`;
+												sendMessage({ text: message });
+											}}
 										>
-											View Product →
-										</a>
-									)}
+											Add to Cart
+										</Button>
+									</div>
 								</div>
 							</div>
 						</CarouselItem>

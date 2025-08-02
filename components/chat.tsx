@@ -58,7 +58,7 @@ export function Chat() {
 							key={message.id}
 						>
 							<AIMessageContent>
-								<MessagePartsHandler parts={message.parts} />
+								<MessagePartsHandler parts={message.parts} sendMessage={sendMessage} />
 							</AIMessageContent>
 						</AIMessage>
 					))}

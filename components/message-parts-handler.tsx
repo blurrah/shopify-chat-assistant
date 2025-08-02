@@ -18,9 +18,10 @@ import { ProductCarousel } from "./tools/product-carousel";
 
 interface MessagePartsHandlerProps {
 	parts: UIMessagePart<UIDataTypes, ChatTools>[];
+	sendMessage: (message: { text: string }) => void;
 }
 
-export function MessagePartsHandler({ parts }: MessagePartsHandlerProps) {
+export function MessagePartsHandler({ parts, sendMessage }: MessagePartsHandlerProps) {
 	return (
 		<>
 			{parts.map((part, index) => {
@@ -75,7 +76,7 @@ export function MessagePartsHandler({ parts }: MessagePartsHandlerProps) {
 								{/* Add carousel for catalog results */}
 								{hasCarousel && (
 									<div className="mt-4">
-										<ProductCarousel data={part.output} />
+										<ProductCarousel data={part.output} sendMessage={sendMessage} />
 									</div>
 								)}
 							</div>
