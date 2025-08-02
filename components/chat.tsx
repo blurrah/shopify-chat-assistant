@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	AIConversation,
 	AIConversationContent,
@@ -15,10 +15,42 @@ import type { ChatMessage } from "@/lib/types";
 import { MessageInput } from "./message-input";
 import { MessagePartsHandler } from "./message-parts-handler";
 import { OpeningScreen } from "./opening-screen";
+import { useChatPersistence } from "@/hooks/use-chat-persistence";
 
 export function Chat() {
-	const { messages, sendMessage, status } = useChat<ChatMessage>();
+	const { messages, sendMessage, status, setMessages } = useChat<ChatMessage>();
 	const [showOpeningScreen, setShowOpeningScreen] = useState(true);
+	const { 
+		isLoading: isPersistenceLoading, 
+		saveMessages, 
+		loadMessages 
+	} = useChatPersistence();
+
+	// Load persisted messages on component mount
+	useEffect(() => {
+		const loadPersistedMessages = async () => {
+			if (isPersistenceLoading) return;
+			
+			try {
+				const persistedMessages = await loadMessages();
+				if (persistedMessages.length > 0) {
+					setMessages(persistedMessages);
+					setShowOpeningScreen(false);
+				}
+			} catch (error) {
+				console.error('Failed to load persisted messages:', error);
+			}
+		};
+
+		loadPersistedMessages();
+	}, [isPersistenceLoading, loadMessages, setMessages]);
+
+	// Save messages whenever they change
+	useEffect(() => {
+		if (messages.length > 0 && !isPersistenceLoading) {
+			saveMessages(messages);
+		}
+	}, [messages, saveMessages, isPersistenceLoading]);
 
 	const handleOpeningSubmit = (message: string) => {
 		setShowOpeningScreen(false);
