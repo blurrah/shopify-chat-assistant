@@ -1,9 +1,12 @@
 import { Chat } from "@/components/chat";
+import { debugFlag } from "@/lib/flags";
 
-export default function Home() {
+export default async function Home() {
+	const isDebug = await debugFlag()
+
 	return (
 		<div className="h-screen w-full">
-			<Chat />
+			<Chat isDebug={isDebug} />
 		</div>
 	);
 }

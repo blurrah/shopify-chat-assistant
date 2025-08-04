@@ -19,9 +19,10 @@ import { ProductCarousel } from "./tools/product-carousel";
 interface MessagePartsHandlerProps {
 	parts: UIMessagePart<UIDataTypes, ChatTools>[];
 	sendMessage: (message: { text: string }) => void;
+	isDebug: boolean;
 }
 
-export function MessagePartsHandler({ parts, sendMessage }: MessagePartsHandlerProps) {
+export function MessagePartsHandler({ parts, sendMessage, isDebug }: MessagePartsHandlerProps) {
 	return (
 		<>
 			{parts.map((part, index) => {
@@ -54,6 +55,7 @@ export function MessagePartsHandler({ parts, sendMessage }: MessagePartsHandlerP
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
 							<div key={index} className={hasCarousel ? "has-carousel" : ""}>
 								{/* AI Tool for debugging */}
+								{isDebug && (
 								<AITool defaultOpen={defaultOpen}>
 									<AIToolHeader
 										status={status}
@@ -70,9 +72,10 @@ export function MessagePartsHandler({ parts, sendMessage }: MessagePartsHandlerP
 										{"errorText" in part && part.errorText && (
 											<AIToolResult error={part.errorText} />
 										)}
-									</AIToolContent>
-								</AITool>
-								
+										</AIToolContent>
+									</AITool>
+								)}
+
 								{/* Add carousel for catalog results */}
 								{hasCarousel && (
 									<div className="mt-4">
