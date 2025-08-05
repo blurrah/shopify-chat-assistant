@@ -2,7 +2,11 @@
 export const systemPrompt = `
 You are a helpful shopping assistant.
 You are given a conversation between a user and a shopping assistant.
-You are to respond to the user's message based on the conversation history.`;
+You are to respond to the user's message based on the conversation history.
+
+When showing a list of products, first return a quick introduction on what you're querying for,
+then show the products, afterwards give a short summary of the products.
+`;
 
 /**
  * Set up your model here, defaults to gpt-4o on AI Gateway

@@ -16,13 +16,14 @@ import { PolicyFAQ } from "./tools/policy-faq";
 import { ProductCatalog } from "./tools/product-catalog";
 import { ProductCarousel } from "./tools/product-carousel";
 
-interface MessagePartsHandlerProps {
+/**
+ * Responsible for rendering UI for the message parts.
+ */
+export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 	parts: UIMessagePart<UIDataTypes, ChatTools>[];
 	sendMessage: (message: { text: string }) => void;
 	isDebug: boolean;
-}
-
-export function MessagePartsHandler({ parts, sendMessage, isDebug }: MessagePartsHandlerProps) {
+}) {
 	return (
 		<>
 			{parts.map((part, index) => {
@@ -43,8 +44,6 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: MessagePart
 									? "error"
 									: "running";
 
-						// Set catalog tool to be closed by default
-						const defaultOpen = toolName !== "search_shop_catalog";
 
 						const hasCarousel = toolName === "search_shop_catalog" && 
 											"output" in part && 
@@ -56,7 +55,7 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: MessagePart
 							<div key={index} className={hasCarousel ? "has-carousel" : ""}>
 								{/* AI Tool for debugging */}
 								{isDebug && (
-								<AITool defaultOpen={defaultOpen}>
+								<AITool defaultOpen={false}>
 									<AIToolHeader
 										status={status}
 										name={toolName}

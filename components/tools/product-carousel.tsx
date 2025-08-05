@@ -10,23 +10,14 @@ import {
 	CarouselPrevious,
 } from "@/components/ui/carousel";
 import type { SearchShopCatalogOutput } from "@/lib/types";
-import { shopifyToolSchemas } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { safeValidateToolResult } from "@/lib/validation";
 
-interface ProductCarouselProps {
-	data: unknown;
+export function ProductCarousel({ data, className, sendMessage }: {
+	data: SearchShopCatalogOutput;
 	className?: string;
 	sendMessage: (message: { text: string }) => void;
-}
-
-export function ProductCarousel({ data, className, sendMessage }: ProductCarouselProps) {
-	const catalogData = safeValidateToolResult(
-		shopifyToolSchemas.searchShopCatalogOutput,
-		data,
-		{ products: [] } as SearchShopCatalogOutput,
-	);
-	const products = catalogData.products;
+}) {
+	const products = data.products;
 
 	if (products.length === 0) {
 		return null;
@@ -45,9 +36,9 @@ export function ProductCarousel({ data, className, sendMessage }: ProductCarouse
 				}}
 				className="w-full mr-4"
 			>
-				<CarouselContent>
+				<CarouselContent className="">
 					{products.map((product) => (
-						<CarouselItem key={product.product_id} className="md:basis-1/2 lg:basis-1/3">
+						<CarouselItem key={product.product_id} className="basis-1/2 md:basis-1/3 lg:basis-1/4">
 							<div className="rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full flex flex-col">
 								{product.variants[0].image_url && (
 									<img
