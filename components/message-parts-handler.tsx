@@ -13,7 +13,6 @@ import { validateToolResult } from "@/lib/validation";
 import { Cart } from "./tools/cart";
 import { CartUpdate } from "./tools/cart-update";
 import { PolicyFAQ } from "./tools/policy-faq";
-import { ProductCatalog } from "./tools/product-catalog";
 import { ProductCarousel } from "./tools/product-carousel";
 
 /**
@@ -44,43 +43,36 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 									? "error"
 									: "running";
 
-
-						const hasCarousel = toolName === "search_shop_catalog" && 
-											"output" in part && 
-											part.output && 
-											status === "completed";
+						const isCompleted = status === "completed";
+						const hasOutput = "output" in part && part.output;
 
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
-							<div key={index} className={hasCarousel ? "has-carousel" : ""}>
-								{/* AI Tool for debugging */}
+							<div key={index}>
+								{/* Used for debugging tool calls */}
 								{isDebug && (
-								<AITool defaultOpen={false}>
-									<AIToolHeader
-										status={status}
-										name={toolName}
-										description={getToolDescription(toolName)}
-									/>
-									<AIToolContent>
-										{"input" in part && part.input && (
-											<AIToolParameters parameters={part.input} />
-										)}
-										{"output" in part &&
-											part.output &&
-											renderShopifyToolResult(toolName, part.output, false)}
-										{"errorText" in part && part.errorText && (
-											<AIToolResult error={part.errorText} />
-										)}
+									<AITool defaultOpen={false}>
+										<AIToolHeader
+											status={status}
+											name={toolName}
+											description={getToolDescription(toolName)}
+										/>
+										<AIToolContent>
+											{"input" in part && part.input && (
+												<AIToolParameters parameters={part.input} />
+											)}
+											{"output" in part && part.output && (
+												<AIToolResult result={<pre>{JSON.stringify(part.output, null, 2)}</pre>} />
+											)}
+											{"errorText" in part && part.errorText && (
+												<AIToolResult error={part.errorText} />
+											)}
 										</AIToolContent>
 									</AITool>
 								)}
 
-								{/* Add carousel for catalog results */}
-								{hasCarousel && (
-									<div className="mt-4">
-										<ProductCarousel data={part.output} sendMessage={sendMessage} />
-									</div>
-								)}
+								{/* The actual UI components */}
+								{isCompleted && hasOutput && renderToolUIComponent(toolName, part.output, sendMessage)}
 							</div>
 						);
 					}
@@ -103,16 +95,12 @@ function getToolDescription(toolName: string): string {
 	return descriptions[toolName] || "Running tool";
 }
 
-function renderShopifyToolResult(
+function renderToolUIComponent(
 	toolName: string,
 	result: unknown,
-	isError?: boolean,
+	sendMessage: (message: { text: string }) => void,
 ): React.ReactNode {
-	if (isError) {
-		return <AIToolResult error={String(result)} />;
-	}
-
-	// Validate the result before rendering
+	// Validate the result before rendering with a clean switch handler
 	switch (toolName) {
 		case "search_shop_catalog": {
 			const validationResult = validateToolResult(
@@ -121,13 +109,11 @@ function renderShopifyToolResult(
 			);
 			if (!validationResult.success) {
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
-				return (
-					<AIToolResult
-						error={`Invalid tool result: ${validationResult.error}`}
-					/>
-				);
+				return null;
 			}
-			return <ProductCatalog data={result} />;
+			return (
+					<ProductCarousel data={validationResult.data} sendMessage={sendMessage} />
+			);
 		}
 
 		case "search_shop_policies_and_faqs": {
@@ -137,11 +123,7 @@ function renderShopifyToolResult(
 			);
 			if (!validationResult.success) {
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
-				return (
-					<AIToolResult
-						error={`Invalid tool result: ${validationResult.error}`}
-					/>
-				);
+				return null;
 			}
 			return <PolicyFAQ data={result} />;
 		}
@@ -151,14 +133,9 @@ function renderShopifyToolResult(
 				shopifyToolSchemas.getCartOutput,
 				result,
 			);
-			console.log("result", result);
 			if (!validationResult.success) {
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
-				return (
-					<AIToolResult
-						error={`Invalid tool result: ${validationResult.error}`}
-					/>
-				);
+				return null;
 			}
 			return <Cart data={validationResult.data} />;
 		}
@@ -170,18 +147,13 @@ function renderShopifyToolResult(
 			);
 			if (!validationResult.success) {
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
-				return (
-					<AIToolResult
-						error={`Invalid tool result: ${validationResult.error}`}
-					/>
-				);
+				return null;
 			}
 			return <CartUpdate data={validationResult.data} />;
 		}
 
 		default:
-			return (
-				<AIToolResult result={<pre>{JSON.stringify(result, null, 2)}</pre>} />
-			);
+			// Don't render anything for unknown tools
+			return null;
 	}
 }

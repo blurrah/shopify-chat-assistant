@@ -37,12 +37,15 @@ export function ProductCarousel({ data, className, sendMessage }: {
 				className="w-full mr-4"
 			>
 				<CarouselContent className="">
-					{products.map((product) => (
-						<CarouselItem key={product.product_id} className="basis-1/2 md:basis-1/3 lg:basis-1/4">
+					{products.map((product) => {
+						const displayProduct = product;
+						console.log("displayProduct", displayProduct);
+						return (
+						<CarouselItem key={product.product_id} className="md:basis-1/2 ">
 							<div className="rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full flex flex-col">
-								{product.variants[0].image_url && (
+								{displayProduct.image_url && (
 									<img
-										src={product.variants[0].image_url}
+										src={displayProduct.image_url}
 										alt={product.title}
 										className="w-full h-48 rounded-md object-cover mb-3"
 									/>
@@ -53,8 +56,7 @@ export function ProductCarousel({ data, className, sendMessage }: {
 
 									<div className="flex items-center justify-between">
 										<span className="font-semibold text-base">
-											{product.variants[0].currency || "$"}
-											{product.variants[0].price}
+											Between {product.price_range.currency || "$"}{product.price_range.min} and {product.price_range.currency || "$"}{product.price_range.max}
 										</span>
 									</div>
 
@@ -79,17 +81,28 @@ export function ProductCarousel({ data, className, sendMessage }: {
 											size="sm"
 											className="w-full"
 											onClick={() => {
-												const message = `Add "${product.title}" to my cart (variant: ${product.variants[0].variant_id})`;
+												const message = `Add "${product.title}" to my cart (variant: ${"variant_id" in displayProduct ? displayProduct.variant_id : "default"})`;
 												sendMessage({ text: message });
 											}}
 										>
 											Add to Cart
 										</Button>
+										<Button
+											size="sm"
+											className="w-full"
+											variant="outline"
+											onClick={() => {
+												const message = `Get the product details for ${product.product_id}`;
+												sendMessage({ text: message });
+											}}
+										>
+											Get product details
+										</Button>
 									</div>
 								</div>
 							</div>
 						</CarouselItem>
-					))}
+					)})}
 				</CarouselContent>
 				<CarouselPrevious />
 				<CarouselNext />

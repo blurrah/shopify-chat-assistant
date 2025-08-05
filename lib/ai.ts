@@ -6,6 +6,8 @@ You are to respond to the user's message based on the conversation history.
 
 When showing a list of products, first return a quick introduction on what you're querying for,
 then show the products, afterwards give a short summary of the products.
+
+When the question can be answered with a tool call, ALWAYS CALL THE TOOL, do not answer the question.
 `;
 
 /**

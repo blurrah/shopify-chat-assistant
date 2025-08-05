@@ -26,10 +26,15 @@ const productSchema = z.object({
 			currency: z.string(),
 			image_url: z.string().optional(),
 		}),
-	),
+	).optional(),
 	url: z.string().optional(),
-	imageUrl: z.string().optional(),
+	image_url: z.string().optional(),
 	description: z.string().optional(),
+	price_range: z.object({
+		currency: z.string(),
+		max: z.string(),
+		min: z.string(),
+	}).optional(),
 });
 
 // Cart item schema
@@ -126,7 +131,7 @@ const shopifyCartSchema = z.object({
 		total_tax_amount: z.object({
 			amount: z.string(),
 			currency: z.string(),
-		}),
+		}).optional(),
 	}),
 	total_quantity: z.number(),
 	checkout_url: z.string(),
