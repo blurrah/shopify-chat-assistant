@@ -15,6 +15,7 @@ import { CartUpdate } from "./tools/cart-update";
 import { PolicyFAQ } from "./tools/policy-faq";
 import { ProductCarousel } from "./tools/product-carousel";
 import { ProductDetails } from "./ecom-ui/product-details";
+import { Markdown } from "./markdown";
 
 /**
  * Responsible for rendering UI for the message parts.
@@ -28,7 +29,7 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 		<>
 			{parts.map((part, index) => {
 				if (part.type === "text") {
-					return <span key={part.text}>{part.text}</span>;
+					return <Markdown key={part.text}>{part.text}</Markdown>;
 				}
 
 				// Handle tool calls - the type includes the tool name
