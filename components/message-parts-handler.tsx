@@ -26,7 +26,7 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 	isDebug: boolean;
 }) {
 	return (
-		<>
+		<div className="space-y-4">
 			{parts.map((part, index) => {
 				if (part.type === "text") {
 					return <Markdown key={part.text}>{part.text}</Markdown>;
@@ -94,7 +94,7 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 
 				return null;
 			})}
-		</>
+		</div>
 	);
 }
 
