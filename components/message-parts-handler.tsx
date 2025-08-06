@@ -1,6 +1,6 @@
 "use client";
 
-import type { UIDataTypes, UIMessagePart } from "ai";
+import type { ToolUIPart, UIDataTypes, UIMessagePart } from "ai";
 import {
 	AITool,
 	AIToolContent,
@@ -14,6 +14,7 @@ import { Cart } from "./tools/cart";
 import { CartUpdate } from "./tools/cart-update";
 import { PolicyFAQ } from "./tools/policy-faq";
 import { ProductCarousel } from "./tools/product-carousel";
+import { ProductDetails } from "./ecom-ui/product-details";
 
 /**
  * Responsible for rendering UI for the message parts.
@@ -34,17 +35,20 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 				if (part.type.startsWith("tool-")) {
 					const toolName = part.type.replace("tool-", "");
 
+					// Cast part as ToolUIPart if this is correct
+					const toolPart = part as ToolUIPart;
+
 					// Check if this is a streaming tool call or completed
-					if ("state" in part) {
+					if ("state" in toolPart) {
 						const status =
-							part.state === "output-available"
+							toolPart.state === "output-available"
 								? "completed"
-								: part.state === "output-error"
+								: toolPart.state === "output-error"
 									? "error"
 									: "running";
 
 						const isCompleted = status === "completed";
-						const hasOutput = "output" in part && part.output;
+						const hasOutput = "output" in toolPart && (toolPart?.output ?? false);
 
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
@@ -58,21 +62,22 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 											description={getToolDescription(toolName)}
 										/>
 										<AIToolContent>
-											{"input" in part && part.input && (
-												<AIToolParameters parameters={part.input} />
-											)}
-											{"output" in part && part.output && (
-												<AIToolResult result={<pre>{JSON.stringify(part.output, null, 2)}</pre>} />
-											)}
-											{"errorText" in part && part.errorText && (
-												<AIToolResult error={part.errorText} />
-											)}
+											{/* Messy code, need to fix this */}
+											{"input" in toolPart && (toolPart.input ? (
+												<AIToolParameters parameters={toolPart.input as Record<string, unknown>} />
+											) : null)}
+											{"output" in toolPart && (toolPart?.output ? (
+												<AIToolResult result={JSON.stringify(toolPart.output, null, 2)} />
+											) : null)}
+											{"errorText" in toolPart && (toolPart.errorText ? (
+												<AIToolResult error={toolPart.errorText} />
+											) : null)}
 										</AIToolContent>
 									</AITool>
 								)}
 
 								{/* The actual UI components */}
-								{isCompleted && hasOutput && renderToolUIComponent(toolName, part.output, sendMessage)}
+								{isCompleted && hasOutput && renderToolUIComponent(toolName, toolPart.output, sendMessage)}
 							</div>
 						);
 					}
@@ -90,6 +95,7 @@ function getToolDescription(toolName: string): string {
 		search_shop_policies_and_faqs: "Looking up store policies and FAQs",
 		get_cart: "Retrieving cart contents",
 		update_cart: "Updating cart items",
+		get_product_details: "Getting product details",
 	};
 
 	return descriptions[toolName] || "Running tool";
@@ -150,6 +156,18 @@ function renderToolUIComponent(
 				return null;
 			}
 			return <CartUpdate data={validationResult.data} />;
+		}
+
+		case "get_product_details": {
+			const validationResult = validateToolResult(
+				shopifyToolSchemas.getProductDetailsOutput,
+				result,
+			);
+			if (!validationResult.success) {
+				console.warn(`Invalid ${toolName} result:`, validationResult.error);
+				return null;
+			}
+			return <ProductDetails data={validationResult.data} sendMessage={sendMessage} />;
 		}
 
 		default:

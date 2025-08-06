@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import type { Product, SearchShopCatalogOutput } from "@/lib/types";
+import type { SearchShopCatalogOutput } from "@/lib/types";
 import { shopifyToolSchemas } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { safeValidateToolResult } from "@/lib/validation";
@@ -40,7 +40,7 @@ export function ProductCatalog({ data, className }: ProductCatalogProps) {
 						key={product.product_id}
 						className="flex gap-3 rounded-lg border p-3 hover:bg-muted/50 transition-colors"
 					>
-						{product.variants[0].image_url && (
+						{product.variants?.[0]?.image_url && (
 							<img
 								src={product.variants[0].image_url}
 								alt={product.title}
@@ -53,12 +53,12 @@ export function ProductCatalog({ data, className }: ProductCatalogProps) {
 
 							<div className="flex items-center gap-2 mt-1">
 								<span className="font-semibold text-sm">
-									{product.variants[0].currency || "$"}
-									{product.variants[0].price}
+									{product.variants?.[0]?.currency || "$"}
+									{product.variants?.[0]?.price}
 								</span>
-								{product.variants[0].variant_id && (
+								{product.variants?.[0]?.variant_id && (
 									<Badge variant="outline" className="text-xs">
-										Variant: {product.variants[0].variant_id}
+										Variant: {product.variants?.[0]?.variant_id}
 									</Badge>
 								)}
 							</div>

@@ -8,6 +8,12 @@ When showing a list of products, first return a quick introduction on what you'r
 then show the products, afterwards give a short summary of the products.
 
 When the question can be answered with a tool call, ALWAYS CALL THE TOOL, do not answer the question.
+
+## Instructions for tool calling
+
+### get_product_details
+- Use the options field to give more specific responses based on the questions, such as specific variants or sizes etc. Make this as specific as possible.
+    - An example is "What is the price of the black xl t-shirt?" -> "{ "color": "black", "size": "xl" }"
 `;
 
 /**

@@ -76,6 +76,10 @@ const updateCartInputSchema = z.object({
 	),
 });
 
+const getProductDetailsInputSchema = z.object({
+	productId: z.string(),
+});
+
 // Output schemas
 const searchShopCatalogOutputSchema = z.object({
 	products: z.array(productSchema),
@@ -149,6 +153,38 @@ const updateCartOutputSchema = z.object({
 	errors: z.array(z.string()),
 });
 
+const getProductDetailsOutputSchema = z.object({
+	instructions: z.string(),
+	product: z.object({
+		product_id: z.string(),
+		title: z.string(),
+		description: z.string(),
+		url: z.string(),
+		image_url: z.string(),
+		images: z.array(z.object({
+			url: z.string(),
+			alt_text: z.string().nullable(),
+		})),
+		options: z.array(z.object({
+			name: z.string(),
+			values: z.array(z.string()),
+		})),
+		price_range: z.object({
+			min: z.string(),
+			max: z.string(),
+			currency: z.string(),
+		}),
+		selectedOrFirstAvailableVariant: z.object({
+			variant_id: z.string(),
+			title: z.string(),
+			price: z.string(),
+			currency: z.string(),
+			image_url: z.string(),
+			available: z.boolean(),
+		}),
+	}),
+});
+
 // Tool schemas
 const searchShopCatalogToolSchema = z.object({
 	input: searchQueryInputSchema,
@@ -170,6 +206,11 @@ const updateCartToolSchema = z.object({
 	output: updateCartOutputSchema,
 });
 
+const getProductDetailsToolSchema = z.object({
+	input: getProductDetailsInputSchema,
+	output: getProductDetailsOutputSchema,
+});
+
 // Export individual schemas for validation
 export const shopifyToolSchemas = {
 	product: productSchema,
@@ -179,6 +220,7 @@ export const shopifyToolSchemas = {
 	searchShopPoliciesFAQsOutput: searchShopPoliciesFAQsOutputSchema,
 	getCartOutput: getCartOutputSchema,
 	updateCartOutput: updateCartOutputSchema,
+	getProductDetailsOutput: getProductDetailsOutputSchema,
 };
 
 // Inferred types
@@ -193,6 +235,7 @@ export type SearchShopPoliciesFAQsOutput = z.infer<
 >;
 export type GetCartOutput = z.infer<typeof getCartOutputSchema>;
 export type UpdateCartOutput = z.infer<typeof updateCartOutputSchema>;
+export type GetProductDetailsOutput = z.infer<typeof getProductDetailsOutputSchema>;
 
 // Tool types (for AI SDK compatibility)
 type SearchShopCatalogTool = z.infer<typeof searchShopCatalogToolSchema>;
@@ -201,12 +244,14 @@ type SearchShopPoliciesFAQsTool = z.infer<
 >;
 type GetCartTool = z.infer<typeof getCartToolSchema>;
 type UpdateCartTool = z.infer<typeof updateCartToolSchema>;
+type GetProductDetailsTool = z.infer<typeof getProductDetailsToolSchema>;
 
 export type ChatTools = {
 	search_shop_catalog: SearchShopCatalogTool;
 	search_shop_policies_and_faqs: SearchShopPoliciesFAQsTool;
 	get_cart: GetCartTool;
 	update_cart: UpdateCartTool;
+	get_product_details: GetProductDetailsTool;
 };
 
 export type MessageMetadata = z.infer<typeof messageMetadataSchema>;
