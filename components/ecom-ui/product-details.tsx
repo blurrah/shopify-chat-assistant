@@ -39,7 +39,7 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 	};
 
 	return (
-		<div className={cn("space-y-6 max-w-4xl mx-auto", className)}>
+		<div className={cn("space-y-6 max-w-4xl mx-auto", className)} data-slot="product-details">
 			{/* Product Header */}
 			<div className="space-y-2">
 				<h2 className="text-2xl font-bold">

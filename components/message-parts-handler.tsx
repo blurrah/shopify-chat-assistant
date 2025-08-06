@@ -1,6 +1,6 @@
 "use client";
 
-import type { ToolUIPart, UIDataTypes, UIMessagePart } from "ai";
+import type { UIDataTypes, UIMessagePart } from "ai";
 import {
 	AITool,
 	AIToolContent,
@@ -27,28 +27,27 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 	return (
 		<>
 			{parts.map((part, index) => {
+				console.log("part", part);
+
 				if (part.type === "text") {
 					return <span key={part.text}>{part.text}</span>;
 				}
 
 				// Handle tool calls - the type includes the tool name
-				if (part.type.startsWith("tool-")) {
-					const toolName = part.type.replace("tool-", "");
+				if (part.type === "dynamic-tool") {
+					const toolName = part.toolName;
 
-					// Cast part as ToolUIPart if this is correct
-					const toolPart = part as ToolUIPart;
 
 					// Check if this is a streaming tool call or completed
-					if ("state" in toolPart) {
 						const status =
-							toolPart.state === "output-available"
+							part.state === "output-available"
 								? "completed"
-								: toolPart.state === "output-error"
+								: part.state === "output-error"
 									? "error"
 									: "running";
 
 						const isCompleted = status === "completed";
-						const hasOutput = "output" in toolPart && (toolPart?.output ?? false);
+						const hasOutput = part.output !== undefined;
 
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
@@ -63,24 +62,23 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 										/>
 										<AIToolContent>
 											{/* Messy code, need to fix this */}
-											{"input" in toolPart && (toolPart.input ? (
-												<AIToolParameters parameters={toolPart.input as Record<string, unknown>} />
+											{"input" in part && (part.input ? (
+												<AIToolParameters parameters={part.input as Record<string, unknown>} />
 											) : null)}
-											{"output" in toolPart && (toolPart?.output ? (
-												<AIToolResult result={JSON.stringify(toolPart.output, null, 2)} />
+											{"output" in part && (part?.output ? (
+												<AIToolResult result={JSON.stringify(part.output, null, 2)} />
 											) : null)}
-											{"errorText" in toolPart && (toolPart.errorText ? (
-												<AIToolResult error={toolPart.errorText} />
+											{"errorText" in part && (part.errorText ? (
+												<AIToolResult error={part.errorText} />
 											) : null)}
 										</AIToolContent>
 									</AITool>
 								)}
 
 								{/* The actual UI components */}
-								{isCompleted && hasOutput && renderToolUIComponent(toolName, toolPart.output, sendMessage)}
+								{isCompleted && hasOutput && renderToolUIComponent(toolName, part.output, sendMessage)}
 							</div>
 						);
-					}
 				}
 
 				return null;
@@ -107,6 +105,8 @@ function renderToolUIComponent(
 	sendMessage: (message: { text: string }) => void,
 ): React.ReactNode {
 	// Validate the result before rendering with a clean switch handler
+
+	console.log("result", result);
 	switch (toolName) {
 		case "search_shop_catalog": {
 			const validationResult = validateToolResult(

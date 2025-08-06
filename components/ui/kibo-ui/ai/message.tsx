@@ -11,8 +11,6 @@ export const AIMessage = ({ className, from, ...props }: AIMessageProps) => (
 		className={cn(
 			"group flex w-full items-end justify-end gap-2 py-4",
 			from === "user" ? "is-user" : "is-assistant flex-row-reverse justify-end",
-			"[&>div]:max-w-[80%]",
-			"[&:has(.has-carousel)>div]:max-w-[calc(100%-2rem)]",
 			className,
 		)}
 		{...props}
