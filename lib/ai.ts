@@ -14,6 +14,11 @@ When the question can be answered with a tool call, ALWAYS CALL THE TOOL, do not
 ### get_product_details
 - Use the options field to give more specific responses based on the questions, such as specific variants or sizes etc. Make this as specific as possible.
     - An example is "What is the price of the black xl t-shirt?" -> "{ "color": "black", "size": "xl" }"
+
+## update_cart
+- If the user asks to update the cart, use the update_cart tool to update the cart.
+- When a variant combination is given, always add that variant. If you do not know the id of the variant, use the get_product_details tool to get the product details and then use the update_cart tool to add the product to the cart.
+IF YOU DO NOT HAVE THE VARIANT ID FOR THE CORRECT COMBINATION, DO NOT ADD THE PRODUCT TO THE CART. UNDER NO CIRCUMSTANCE SHOULD YOU DO THAT. You either find the right variant id or let the user know you failed.
 `;
 
 /**

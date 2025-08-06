@@ -2,13 +2,6 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "@/components/ui/carousel";
 import type { GetProductDetailsOutput } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -21,8 +14,8 @@ interface ProductDetailsProps {
 
 export function ProductDetails({ data, sendMessage, className }: ProductDetailsProps) {
 	const { product } = data;
-	console.log("product", product);
 	const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
 	const handleOptionChange = (optionName: string, value: string) => {
 		setSelectedOptions(prev => ({
@@ -38,8 +31,16 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 		return optionText || product.selectedOrFirstAvailableVariant.title;
 	};
 
+	const formatPrice = (price: string, currency: string) => {
+		const numericPrice = parseFloat(price);
+		return new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: currency,
+		}).format(numericPrice);
+	};
+
 	return (
-		<div className={cn("space-y-6 max-w-4xl mx-auto", className)} data-slot="product-details">
+		<div className={cn("space-y-6 w-full max-w-4xl mx-auto px-4", className)} data-slot="product-details">
 			{/* Product Header */}
 			<div className="space-y-2">
 				<h2 className="text-2xl font-bold">
@@ -52,13 +53,13 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 						{product.title}
 					</a>
 				</h2>
-				<div className="flex items-center gap-4">
+				<div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
 					<div className="text-2xl font-bold">
-						{product.price_range.currency}{product.selectedOrFirstAvailableVariant.price}
+						{formatPrice(product.selectedOrFirstAvailableVariant.price, product.selectedOrFirstAvailableVariant.currency)}
 					</div>
 					{product.price_range.min !== product.price_range.max && (
-						<div className="text-muted-foreground">
-							Range: {product.price_range.currency}{product.price_range.min} - {product.price_range.currency}{product.price_range.max}
+						<div className="text-muted-foreground text-sm">
+							Range: {formatPrice(product.price_range.min, product.price_range.currency)} - {formatPrice(product.price_range.max, product.price_range.currency)}
 						</div>
 					)}
 					<Badge variant={product.selectedOrFirstAvailableVariant.available ? "default" : "secondary"}>
@@ -67,43 +68,41 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 				</div>
 			</div>
 
-			<div className="grid md:grid-cols-2 gap-8">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
 				{/* Product Images */}
-				<div className="space-y-4">
-					{product.images.length > 1 ? (
-						<Carousel className="w-full">
-							<CarouselContent>
+				<div className="space-y-4 min-w-0">
+					{/* Main Image */}
+					<div className="aspect-square w-full rounded-lg overflow-hidden bg-gray-100">
+						<img
+							src={product.images.length > 0 ? product.images[selectedImageIndex].url : product.image_url}
+							alt={product.images.length > 0 ? (product.images[selectedImageIndex].alt_text || `${product.title} - Image ${selectedImageIndex + 1}`) : product.title}
+							className="w-full h-full object-cover"
+						/>
+					</div>
+					
+					{/* Thumbnail Navigation */}
+					{product.images.length > 1 && (
+						<div className="min-w-0">
+							<div className="flex gap-2 overflow-x-auto pb-2">
 								{product.images.map((image, index) => (
-									<CarouselItem key={index}>
+									<button
+										key={index}
+										onClick={() => setSelectedImageIndex(index)}
+										className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-md overflow-hidden border-2 transition-all ${
+											selectedImageIndex === index 
+												? "border-primary shadow-md" 
+												: "border-gray-200 hover:border-gray-400"
+										}`}
+									>
 										<img
 											src={image.url}
-											alt={image.alt_text || `${product.title} - Image ${index + 1}`}
-											className="w-full h-96 rounded-lg object-cover"
+											alt={image.alt_text || `${product.title} - Thumbnail ${index + 1}`}
+											className="w-full h-full object-cover"
+											draggable="false"
 										/>
-									</CarouselItem>
+									</button>
 								))}
-							</CarouselContent>
-							<CarouselPrevious />
-							<CarouselNext />
-						</Carousel>
-					) : (
-						<img
-							src={product.image_url}
-							alt={product.title}
-							className="w-full h-96 rounded-lg object-cover"
-						/>
-					)}
-					
-					{product.images.length > 1 && (
-						<div className="flex gap-2 overflow-x-auto">
-							{product.images.map((image, index) => (
-								<img
-									key={index}
-									src={image.url}
-									alt={image.alt_text || `${product.title} - Thumbnail ${index + 1}`}
-									className="w-16 h-16 rounded-md object-cover border cursor-pointer hover:border-primary"
-								/>
-							))}
+							</div>
 						</div>
 					)}
 				</div>
@@ -118,10 +117,9 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 
 					{/* Options */}
 					{product.options.length > 0 && (
-						<div className="space-y-4">
-							<h3 className="font-semibold">Options</h3>
+						<div className="flex flex-col gap-5">
 							{product.options.map((option) => (
-								<div key={option.name} className="space-y-2">
+								<div key={option.name} className="flex flex-col gap-3">
 									<label className="text-sm font-medium">{option.name}</label>
 									<div className="flex flex-wrap gap-2">
 										{option.values.map((value) => (
@@ -142,12 +140,6 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 							))}
 						</div>
 					)}
-
-					{/* Selected Variant Info */}
-					<div className="bg-muted/50 p-4 rounded-lg">
-						<h4 className="font-medium mb-2">Selected Variant</h4>
-						<p className="text-sm text-muted-foreground">{getSelectedVariantText()}</p>
-					</div>
 
 					{/* Action Buttons */}
 					<div className="space-y-3">

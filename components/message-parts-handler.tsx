@@ -27,8 +27,6 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 	return (
 		<>
 			{parts.map((part, index) => {
-				console.log("part", part);
-
 				if (part.type === "text") {
 					return <span key={part.text}>{part.text}</span>;
 				}
@@ -105,8 +103,6 @@ function renderToolUIComponent(
 	sendMessage: (message: { text: string }) => void,
 ): React.ReactNode {
 	// Validate the result before rendering with a clean switch handler
-
-	console.log("result", result);
 	switch (toolName) {
 		case "search_shop_catalog": {
 			const validationResult = validateToolResult(

@@ -119,6 +119,7 @@ export async function POST(req: NextRequest) {
 		execute: ({ writer }) => {
 			const result = streamText({
 				model: "openai/gpt-4o",
+				stopWhen: stepCountIs(10),
 				tools,
 				messages: convertToModelMessages(messages),
 				system: systemPrompt,
