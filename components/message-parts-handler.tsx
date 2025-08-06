@@ -36,7 +36,6 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 				if (part.type === "dynamic-tool") {
 					const toolName = part.toolName;
 
-
 					// Check if this is a streaming tool call or completed
 						const status =
 							part.state === "output-available"
@@ -47,6 +46,19 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 
 						const isCompleted = status === "completed";
 						const hasOutput = part.output !== undefined;
+
+						// Check if this is an internal tool call by looking at the input parameters
+						const isInternal = "input" in part && 
+							part.input && 
+							typeof part.input === 'object' && 
+							part.input !== null && 
+							'internal' in part.input && 
+							part.input.internal === true;
+
+						// Skip rendering internal tool calls entirely (unless in debug mode)
+						if (isInternal && !isDebug) {
+							return null;
+						}
 
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
@@ -74,8 +86,8 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 									</AITool>
 								)}
 
-								{/* The actual UI components */}
-								{isCompleted && hasOutput && renderToolUIComponent(toolName, part.output, sendMessage)}
+								{/* The actual UI components - skip for internal calls */}
+								{isCompleted && hasOutput && !isInternal && renderToolUIComponent(toolName, part.output, sendMessage)}
 							</div>
 						);
 				}

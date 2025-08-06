@@ -1,6 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import hardenReactMarkdown from "harden-react-markdown";
-import { allowedImagePrefixes, allowedOrigins } from "@/lib/ai";
+import { allowedOrigins } from "@/lib/ai";
 
 // Uses harden-react-markdown to prevent prompt injection and other attack vectors
 const HardenedMarkdown = hardenReactMarkdown(ReactMarkdown);
@@ -10,7 +10,6 @@ export function Markdown({ children }: { children: string }) {
     <HardenedMarkdown
       defaultOrigin="https://shopify-chat-assistant.vercel.app"
       allowedLinkPrefixes={allowedOrigins}
-      allowedImagePrefixes={allowedImagePrefixes}
       components={{
         a: ({ href, children }) => {
           if (!href) return children;
