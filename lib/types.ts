@@ -1,6 +1,11 @@
 import type { UIDataTypes, UIMessage } from "ai";
 import { z } from "zod";
 
+/**
+ * TODO:
+ * - Add error handling with discriminated unions to tool output schema's
+ */
+
 export const messageMetadataSchema = z.object({
 	createdAt: z.string(),
 });
@@ -150,7 +155,7 @@ const getCartOutputSchema = z.object({
 const updateCartOutputSchema = z.object({
 	instructions: z.string(),
 	cart: shopifyCartSchema,
-	errors: z.array(z.string()),
+	errors: z.array(z.record(z.string(), z.string())),
 });
 
 const getProductDetailsOutputSchema = z.object({

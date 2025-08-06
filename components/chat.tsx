@@ -104,7 +104,7 @@ export function Chat({ isDebug = false }: { isDebug?: boolean }) {
 						<AIMessage
 							from={message.role === "system" ? "assistant" : message.role}
 							key={message.id}
-							className="[&:has([data-slot='carousel'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='product-details'])>div]:max-w-[calc(100%-2rem)]"
+							className="[&:has([data-slot='carousel'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='product-details'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='cart-update'])>div]:w-[calc(80%-2rem)]"
 						>
 							<AIMessageContent>
 								<MessagePartsHandler parts={message.parts} sendMessage={sendMessage} isDebug={isDebug} />

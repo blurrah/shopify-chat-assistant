@@ -127,8 +127,7 @@ export async function POST(req: NextRequest) {
 
 			result.consumeStream();
 
-			// TODO: Remove reasoning?
-			writer.merge(result.toUIMessageStream({ sendReasoning: true }));
+			writer.merge(result.toUIMessageStream());
 		},
 	});
     // This doesn't do much yet as there's no persistence but still

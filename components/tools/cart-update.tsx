@@ -20,7 +20,7 @@ export function CartUpdate({ data, className }: CartUpdateProps) {
 	const updatedItems = data.cart.lines || [];
 
 	return (
-		<div className={cn("space-y-4", className)}>
+		<div data-slot="cart-update" className={cn("space-y-4", className)}>
 			<div className="flex items-center gap-2">
 				<CheckCircleIcon className="size-4 text-green-600" />
 				<h4 className="font-medium text-sm">Cart Updated Successfully</h4>
