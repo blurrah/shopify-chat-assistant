@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
 			writer.merge(result.toUIMessageStream());
 		},
 	});
-    // This doesn't do much yet as there's no persistence but still
+	// This doesn't do much yet as there's no persistence but still
 	const streamContext = getStreamContext();
 
 	if (streamContext) {

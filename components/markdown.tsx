@@ -6,18 +6,27 @@ import { allowedOrigins } from "@/lib/ai";
 const HardenedMarkdown = hardenReactMarkdown(ReactMarkdown);
 
 export function Markdown({ children }: { children: string }) {
-  return (
-    <HardenedMarkdown
-      defaultOrigin="https://shopify-chat-assistant.vercel.app"
-      allowedLinkPrefixes={allowedOrigins}
-      components={{
-        a: ({ href, children }) => {
-          if (!href) return children;
-          return <a href={href} target="_blank" className="underline" rel="noopener noreferrer">{children}</a>;
-        },
-      }}
-    >
-      {children}
-    </HardenedMarkdown>
-  );
+	return (
+		<HardenedMarkdown
+			defaultOrigin="https://shopify-chat-assistant.vercel.app"
+			allowedLinkPrefixes={allowedOrigins}
+			components={{
+				a: ({ href, children }) => {
+					if (!href) return children;
+					return (
+						<a
+							href={href}
+							target="_blank"
+							className="underline"
+							rel="noopener noreferrer"
+						>
+							{children}
+						</a>
+					);
+				},
+			}}
+		>
+			{children}
+		</HardenedMarkdown>
+	);
 }

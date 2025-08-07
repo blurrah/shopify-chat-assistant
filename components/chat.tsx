@@ -21,26 +21,26 @@ import { useChatPersistence } from "@/hooks/use-chat-persistence";
 export function Chat({ isDebug = false }: { isDebug?: boolean }) {
 	const { messages, sendMessage, status, setMessages } = useChat<ChatMessage>();
 	const [showOpeningScreen, setShowOpeningScreen] = useState(true);
-	const { 
+	const {
 		sessionId,
-		isLoading: isPersistenceLoading, 
-		saveMessages, 
+		isLoading: isPersistenceLoading,
+		saveMessages,
 		loadMessages,
 		startNewSession,
-		loadSession
+		loadSession,
 	} = useChatPersistence();
 
 	// Load persisted messages when session changes
 	useEffect(() => {
 		const loadPersistedMessages = async () => {
 			if (isPersistenceLoading || !sessionId) return;
-			
+
 			try {
 				const persistedMessages = await loadMessages();
 				setMessages(persistedMessages);
 				setShowOpeningScreen(persistedMessages.length === 0);
 			} catch (error) {
-				console.error('Failed to load persisted messages:', error);
+				console.error("Failed to load persisted messages:", error);
 			}
 		};
 
@@ -107,7 +107,11 @@ export function Chat({ isDebug = false }: { isDebug?: boolean }) {
 							className="[&:has([data-slot='carousel'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='product-details'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='cart-update'])>div]:w-[calc(80%-2rem)]"
 						>
 							<AIMessageContent>
-								<MessagePartsHandler parts={message.parts} sendMessage={sendMessage} isDebug={isDebug} />
+								<MessagePartsHandler
+									parts={message.parts}
+									sendMessage={sendMessage}
+									isDebug={isDebug}
+								/>
 							</AIMessageContent>
 						</AIMessage>
 					))}

@@ -23,23 +23,27 @@ export const McpToolOutputSchema = z.object({
 const productSchema = z.object({
 	product_id: z.string(),
 	title: z.string(),
-	variants: z.array(
-		z.object({
-			variant_id: z.string(),
-			title: z.string(),
-			price: z.string(),
-			currency: z.string(),
-			image_url: z.string().optional(),
-		}),
-	).optional(),
+	variants: z
+		.array(
+			z.object({
+				variant_id: z.string(),
+				title: z.string(),
+				price: z.string(),
+				currency: z.string(),
+				image_url: z.string().optional(),
+			}),
+		)
+		.optional(),
 	url: z.string().optional(),
 	image_url: z.string().optional(),
 	description: z.string().optional(),
-	price_range: z.object({
-		currency: z.string(),
-		max: z.string(),
-		min: z.string(),
-	}).optional(),
+	price_range: z
+		.object({
+			currency: z.string(),
+			max: z.string(),
+			min: z.string(),
+		})
+		.optional(),
 });
 
 // Cart item schema
@@ -137,10 +141,12 @@ const shopifyCartSchema = z.object({
 			amount: z.string(),
 			currency: z.string(),
 		}),
-		total_tax_amount: z.object({
-			amount: z.string(),
-			currency: z.string(),
-		}).optional(),
+		total_tax_amount: z
+			.object({
+				amount: z.string(),
+				currency: z.string(),
+			})
+			.optional(),
 	}),
 	total_quantity: z.number(),
 	checkout_url: z.string(),
@@ -166,14 +172,18 @@ const getProductDetailsOutputSchema = z.object({
 		description: z.string(),
 		url: z.string(),
 		image_url: z.string(),
-		images: z.array(z.object({
-			url: z.string(),
-			alt_text: z.string().nullable(),
-		})),
-		options: z.array(z.object({
-			name: z.string(),
-			values: z.array(z.string()),
-		})),
+		images: z.array(
+			z.object({
+				url: z.string(),
+				alt_text: z.string().nullable(),
+			}),
+		),
+		options: z.array(
+			z.object({
+				name: z.string(),
+				values: z.array(z.string()),
+			}),
+		),
 		price_range: z.object({
 			min: z.string(),
 			max: z.string(),
@@ -240,7 +250,9 @@ export type SearchShopPoliciesFAQsOutput = z.infer<
 >;
 export type GetCartOutput = z.infer<typeof getCartOutputSchema>;
 export type UpdateCartOutput = z.infer<typeof updateCartOutputSchema>;
-export type GetProductDetailsOutput = z.infer<typeof getProductDetailsOutputSchema>;
+export type GetProductDetailsOutput = z.infer<
+	typeof getProductDetailsOutputSchema
+>;
 
 // Tool types (for AI SDK compatibility)
 type SearchShopCatalogTool = z.infer<typeof searchShopCatalogToolSchema>;

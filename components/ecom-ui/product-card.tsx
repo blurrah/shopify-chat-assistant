@@ -9,9 +9,15 @@ interface ProductCardProps {
 	className?: string;
 }
 
-export function ProductCard({ product, sendMessage, className }: ProductCardProps) {
+export function ProductCard({
+	product,
+	sendMessage,
+	className,
+}: ProductCardProps) {
 	return (
-		<div className={`rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full flex flex-col ${className || ""}`}>
+		<div
+			className={`rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full flex flex-col ${className || ""}`}
+		>
 			{product.image_url && (
 				<img
 					src={product.image_url}
@@ -25,7 +31,10 @@ export function ProductCard({ product, sendMessage, className }: ProductCardProp
 
 				<div className="flex items-center justify-between">
 					<span className="font-semibold text-base">
-						Between {product.price_range?.currency || "$"}{product.price_range?.min} and {product.price_range?.currency || "$"}{product.price_range?.max}
+						Between {product.price_range?.currency || "$"}
+						{product.price_range?.min} and{" "}
+						{product.price_range?.currency || "$"}
+						{product.price_range?.max}
 					</span>
 				</div>
 

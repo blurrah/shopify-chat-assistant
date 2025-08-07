@@ -1,94 +1,97 @@
-import { useEffect, useCallback, useState } from 'react';
-import type { ChatMessage } from '@/lib/types';
-import { chatStorage } from '@/lib/chat-storage';
+import { useEffect, useCallback, useState } from "react";
+import type { ChatMessage } from "@/lib/types";
+import { chatStorage } from "@/lib/chat-storage";
 
-const CURRENT_SESSION_KEY = 'current-chat-session-id';
+const CURRENT_SESSION_KEY = "current-chat-session-id";
 
 export function useChatPersistence() {
-  const [sessionId, setSessionId] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
+	const [sessionId, setSessionId] = useState<string>("");
+	const [isLoading, setIsLoading] = useState(true);
 
-  // Generate or get current session ID
-  useEffect(() => {
-    const initSession = () => {
-      let currentSessionId = localStorage.getItem(CURRENT_SESSION_KEY);
-      if (!currentSessionId) {
-        currentSessionId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        localStorage.setItem(CURRENT_SESSION_KEY, currentSessionId);
-      }
-      setSessionId(currentSessionId);
-      setIsLoading(false);
-    };
+	// Generate or get current session ID
+	useEffect(() => {
+		const initSession = () => {
+			let currentSessionId = localStorage.getItem(CURRENT_SESSION_KEY);
+			if (!currentSessionId) {
+				currentSessionId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+				localStorage.setItem(CURRENT_SESSION_KEY, currentSessionId);
+			}
+			setSessionId(currentSessionId);
+			setIsLoading(false);
+		};
 
-    initSession();
-  }, []);
+		initSession();
+	}, []);
 
-  // Save messages to IndexedDB
-  const saveMessages = useCallback(async (messages: ChatMessage[]) => {
-    if (!sessionId || messages.length === 0) return;
-    
-    try {
-      await chatStorage.saveMessages(sessionId, messages);
-    } catch (error) {
-      console.error('Failed to save chat messages:', error);
-    }
-  }, [sessionId]);
+	// Save messages to IndexedDB
+	const saveMessages = useCallback(
+		async (messages: ChatMessage[]) => {
+			if (!sessionId || messages.length === 0) return;
 
-  // Load messages from IndexedDB
-  const loadMessages = useCallback(async (): Promise<ChatMessage[]> => {
-    if (!sessionId) return [];
+			try {
+				await chatStorage.saveMessages(sessionId, messages);
+			} catch (error) {
+				console.error("Failed to save chat messages:", error);
+			}
+		},
+		[sessionId],
+	);
 
-    try {
-      return await chatStorage.loadMessages(sessionId);
-    } catch (error) {
-      console.error('Failed to load chat messages:', error);
-      return [];
-    }
-  }, [sessionId]);
+	// Load messages from IndexedDB
+	const loadMessages = useCallback(async (): Promise<ChatMessage[]> => {
+		if (!sessionId) return [];
 
-  // Start a new chat session
-  const startNewSession = useCallback(() => {
-    const newSessionId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    localStorage.setItem(CURRENT_SESSION_KEY, newSessionId);
-    setSessionId(newSessionId);
-  }, []);
+		try {
+			return await chatStorage.loadMessages(sessionId);
+		} catch (error) {
+			console.error("Failed to load chat messages:", error);
+			return [];
+		}
+	}, [sessionId]);
 
-  // Load a specific session
-  const loadSession = useCallback((targetSessionId: string) => {
-    localStorage.setItem(CURRENT_SESSION_KEY, targetSessionId);
-    setSessionId(targetSessionId);
-  }, []);
+	// Start a new chat session
+	const startNewSession = useCallback(() => {
+		const newSessionId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+		localStorage.setItem(CURRENT_SESSION_KEY, newSessionId);
+		setSessionId(newSessionId);
+	}, []);
 
-  // Delete current session
-  const deleteCurrentSession = useCallback(async () => {
-    if (!sessionId) return;
+	// Load a specific session
+	const loadSession = useCallback((targetSessionId: string) => {
+		localStorage.setItem(CURRENT_SESSION_KEY, targetSessionId);
+		setSessionId(targetSessionId);
+	}, []);
 
-    try {
-      await chatStorage.deleteSession(sessionId);
-      startNewSession();
-    } catch (error) {
-      console.error('Failed to delete chat session:', error);
-    }
-  }, [sessionId, startNewSession]);
+	// Delete current session
+	const deleteCurrentSession = useCallback(async () => {
+		if (!sessionId) return;
 
-  // Get all sessions
-  const getAllSessions = useCallback(async () => {
-    try {
-      return await chatStorage.getAllSessions();
-    } catch (error) {
-      console.error('Failed to get all sessions:', error);
-      return [];
-    }
-  }, []);
+		try {
+			await chatStorage.deleteSession(sessionId);
+			startNewSession();
+		} catch (error) {
+			console.error("Failed to delete chat session:", error);
+		}
+	}, [sessionId, startNewSession]);
 
-  return {
-    sessionId,
-    isLoading,
-    saveMessages,
-    loadMessages,
-    startNewSession,
-    loadSession,
-    deleteCurrentSession,
-    getAllSessions,
-  };
+	// Get all sessions
+	const getAllSessions = useCallback(async () => {
+		try {
+			return await chatStorage.getAllSessions();
+		} catch (error) {
+			console.error("Failed to get all sessions:", error);
+			return [];
+		}
+	}, []);
+
+	return {
+		sessionId,
+		isLoading,
+		saveMessages,
+		loadMessages,
+		startNewSession,
+		loadSession,
+		deleteCurrentSession,
+		getAllSessions,
+	};
 }

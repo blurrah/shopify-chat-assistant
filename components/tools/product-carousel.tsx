@@ -12,7 +12,11 @@ import { ProductCard } from "@/components/ecom-ui/product-card";
 import type { SearchShopCatalogOutput } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-export function ProductCarousel({ data, className, sendMessage }: {
+export function ProductCarousel({
+	data,
+	className,
+	sendMessage,
+}: {
 	data: SearchShopCatalogOutput;
 	className?: string;
 	sendMessage: (message: { text: string }) => void;
@@ -29,7 +33,7 @@ export function ProductCarousel({ data, className, sendMessage }: {
 				<h3 className="font-medium text-lg">Products</h3>
 				<Badge variant="secondary">{products.length} found</Badge>
 			</div>
-			
+
 			<Carousel
 				opts={{
 					align: "start",
@@ -39,10 +43,7 @@ export function ProductCarousel({ data, className, sendMessage }: {
 				<CarouselContent className="">
 					{products.map((product) => (
 						<CarouselItem key={product.product_id} className="md:basis-1/2">
-							<ProductCard 
-								product={product} 
-								sendMessage={sendMessage} 
-							/>
+							<ProductCard product={product} sendMessage={sendMessage} />
 						</CarouselItem>
 					))}
 				</CarouselContent>

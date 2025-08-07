@@ -1,0 +1,45 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
+	"files": {
+		"ignoreUnknown": true,
+		"includes": [
+			"!node_modules/**",
+			"!playwright-report/**",
+			"!public/r/**",
+			"!components/ui/**",
+			"!.next/**",
+			"**/*.ts",
+			"**/*.tsx",
+			"**/*.js",
+			"**/*.jsx",
+			"**/*.json",
+			"**/*.md",
+			"**/*.mdx"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab",
+		"indentWidth": 2
+	},
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "always",
+			"bracketSameLine": false,
+			"bracketSpacing": true,
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"semicolons": "always",
+			"trailingCommas": "all"
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"nursery": {
+				"useSortedClasses": "warn"
+			},
+			"recommended": true
+		}
+	}
+}

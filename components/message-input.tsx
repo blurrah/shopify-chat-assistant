@@ -35,7 +35,7 @@ export function MessageInput({
 	};
 
 	const handleKeyDown = (event: React.KeyboardEvent) => {
-		if (event.key === 'Enter' && !event.shiftKey) {
+		if (event.key === "Enter" && !event.shiftKey) {
 			event.preventDefault();
 			if (text.trim()) {
 				sendMessage({
@@ -50,7 +50,10 @@ export function MessageInput({
 	};
 
 	return (
-		<AIInput onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+		<AIInput
+			onSubmit={handleSubmit}
+			className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent"
+		>
 			<AIInputTextarea
 				onChange={(e) => setText(e.target.value)}
 				onKeyDown={handleKeyDown}

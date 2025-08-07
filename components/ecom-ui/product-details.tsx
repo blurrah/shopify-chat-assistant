@@ -12,15 +12,21 @@ interface ProductDetailsProps {
 	className?: string;
 }
 
-export function ProductDetails({ data, sendMessage, className }: ProductDetailsProps) {
+export function ProductDetails({
+	data,
+	sendMessage,
+	className,
+}: ProductDetailsProps) {
 	const { product } = data;
-	const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+	const [selectedOptions, setSelectedOptions] = useState<
+		Record<string, string>
+	>({});
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
 	const handleOptionChange = (optionName: string, value: string) => {
-		setSelectedOptions(prev => ({
+		setSelectedOptions((prev) => ({
 			...prev,
-			[optionName]: value
+			[optionName]: value,
 		}));
 	};
 
@@ -33,20 +39,23 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 
 	const formatPrice = (price: string, currency: string) => {
 		const numericPrice = parseFloat(price);
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
+		return new Intl.NumberFormat("en-US", {
+			style: "currency",
 			currency: currency,
 		}).format(numericPrice);
 	};
 
 	return (
-		<div className={cn("space-y-6 w-full max-w-4xl mx-auto px-4", className)} data-slot="product-details">
+		<div
+			className={cn("space-y-6 w-full max-w-4xl mx-auto px-4", className)}
+			data-slot="product-details"
+		>
 			{/* Product Header */}
 			<div className="space-y-2">
 				<h2 className="text-2xl font-bold">
-					<a 
-						href={product.url} 
-						target="_blank" 
+					<a
+						href={product.url}
+						target="_blank"
 						rel="noopener noreferrer"
 						className="text-primary hover:underline"
 					>
@@ -55,15 +64,35 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 				</h2>
 				<div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
 					<div className="text-2xl font-bold">
-						{formatPrice(product.selectedOrFirstAvailableVariant.price, product.selectedOrFirstAvailableVariant.currency)}
+						{formatPrice(
+							product.selectedOrFirstAvailableVariant.price,
+							product.selectedOrFirstAvailableVariant.currency,
+						)}
 					</div>
 					{product.price_range.min !== product.price_range.max && (
 						<div className="text-muted-foreground text-sm">
-							Range: {formatPrice(product.price_range.min, product.price_range.currency)} - {formatPrice(product.price_range.max, product.price_range.currency)}
+							Range:{" "}
+							{formatPrice(
+								product.price_range.min,
+								product.price_range.currency,
+							)}{" "}
+							-{" "}
+							{formatPrice(
+								product.price_range.max,
+								product.price_range.currency,
+							)}
 						</div>
 					)}
-					<Badge variant={product.selectedOrFirstAvailableVariant.available ? "default" : "secondary"}>
-						{product.selectedOrFirstAvailableVariant.available ? "In Stock" : "Out of Stock"}
+					<Badge
+						variant={
+							product.selectedOrFirstAvailableVariant.available
+								? "default"
+								: "secondary"
+						}
+					>
+						{product.selectedOrFirstAvailableVariant.available
+							? "In Stock"
+							: "Out of Stock"}
 					</Badge>
 				</div>
 			</div>
@@ -74,12 +103,21 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 					{/* Main Image */}
 					<div className="aspect-square w-full rounded-lg overflow-hidden bg-gray-100">
 						<img
-							src={product.images.length > 0 ? product.images[selectedImageIndex].url : product.image_url}
-							alt={product.images.length > 0 ? (product.images[selectedImageIndex].alt_text || `${product.title} - Image ${selectedImageIndex + 1}`) : product.title}
+							src={
+								product.images.length > 0
+									? product.images[selectedImageIndex].url
+									: product.image_url
+							}
+							alt={
+								product.images.length > 0
+									? product.images[selectedImageIndex].alt_text ||
+										`${product.title} - Image ${selectedImageIndex + 1}`
+									: product.title
+							}
 							className="w-full h-full object-cover"
 						/>
 					</div>
-					
+
 					{/* Thumbnail Navigation */}
 					{product.images.length > 1 && (
 						<div className="min-w-0">
@@ -89,14 +127,17 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 										key={index}
 										onClick={() => setSelectedImageIndex(index)}
 										className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-md overflow-hidden border-2 transition-all ${
-											selectedImageIndex === index 
-												? "border-primary shadow-md" 
+											selectedImageIndex === index
+												? "border-primary shadow-md"
 												: "border-gray-200 hover:border-gray-400"
 										}`}
 									>
 										<img
 											src={image.url}
-											alt={image.alt_text || `${product.title} - Thumbnail ${index + 1}`}
+											alt={
+												image.alt_text ||
+												`${product.title} - Thumbnail ${index + 1}`
+											}
 											className="w-full h-full object-cover"
 											draggable="false"
 										/>
@@ -112,7 +153,9 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 					{/* Description */}
 					<div>
 						<h3 className="font-semibold mb-2">Description</h3>
-						<p className="text-muted-foreground leading-relaxed">{product.description}</p>
+						<p className="text-muted-foreground leading-relaxed">
+							{product.description}
+						</p>
 					</div>
 
 					{/* Options */}
@@ -153,9 +196,11 @@ export function ProductDetails({ data, sendMessage, className }: ProductDetailsP
 								sendMessage({ text: message });
 							}}
 						>
-							{product.selectedOrFirstAvailableVariant.available ? "Add to Cart" : "Out of Stock"}
+							{product.selectedOrFirstAvailableVariant.available
+								? "Add to Cart"
+								: "Out of Stock"}
 						</Button>
-						
+
 						<Button
 							size="lg"
 							variant="outline"

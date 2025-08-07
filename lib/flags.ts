@@ -1,8 +1,8 @@
-import { flag } from 'flags/next';
- 
+import { flag } from "flags/next";
+
 export const debugFlag = flag({
-  key: 'debug-flag',
-  decide() {
-    return false;
-  },
+	key: "debug-flag",
+	decide() {
+		return false;
+	},
 });

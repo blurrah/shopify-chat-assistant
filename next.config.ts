@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-import vercelToolbar from "@vercel/toolbar/plugins/next"
+import vercelToolbar from "@vercel/toolbar/plugins/next";
 
 const withVercelToolbar = vercelToolbar();
 

@@ -20,7 +20,11 @@ import { Markdown } from "./markdown";
 /**
  * Responsible for rendering UI for the message parts.
  */
-export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
+export function MessagePartsHandler({
+	parts,
+	sendMessage,
+	isDebug,
+}: {
 	parts: UIMessagePart<UIDataTypes, ChatTools>[];
 	sendMessage: (message: { text: string }) => void;
 	isDebug: boolean;
@@ -37,59 +41,70 @@ export function MessagePartsHandler({ parts, sendMessage, isDebug }: {
 					const toolName = part.toolName;
 
 					// Check if this is a streaming tool call or completed
-						const status =
-							part.state === "output-available"
-								? "completed"
-								: part.state === "output-error"
-									? "error"
-									: "running";
+					const status =
+						part.state === "output-available"
+							? "completed"
+							: part.state === "output-error"
+								? "error"
+								: "running";
 
-						const isCompleted = status === "completed";
-						const hasOutput = part.output !== undefined;
+					const isCompleted = status === "completed";
+					const hasOutput = part.output !== undefined;
 
-						// Check if this is an internal tool call by looking at the input parameters
-						const isInternal = "input" in part && 
-							part.input && 
-							typeof part.input === 'object' && 
-							part.input !== null && 
-							'internal' in part.input && 
-							part.input.internal === true;
+					// Check if this is an internal tool call by looking at the input parameters
+					const isInternal =
+						"input" in part &&
+						part.input &&
+						typeof part.input === "object" &&
+						part.input !== null &&
+						"internal" in part.input &&
+						part.input.internal === true;
 
-						// Skip rendering internal tool calls entirely (unless in debug mode)
-						if (isInternal && !isDebug) {
-							return null;
-						}
+					// Skip rendering internal tool calls entirely (unless in debug mode)
+					if (isInternal && !isDebug) {
+						return null;
+					}
 
-						return (
-							// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
-							<div key={index}>
-								{/* Used for debugging tool calls */}
-								{isDebug && (
-									<AITool defaultOpen={false}>
-										<AIToolHeader
-											status={status}
-											name={toolName}
-											description={getToolDescription(toolName)}
-										/>
-										<AIToolContent>
-											{/* Messy code, need to fix this */}
-											{"input" in part && (part.input ? (
-												<AIToolParameters parameters={part.input as Record<string, unknown>} />
+					return (
+						// biome-ignore lint/suspicious/noArrayIndexKey: No nice alternative here right now
+						<div key={index}>
+							{/* Used for debugging tool calls */}
+							{isDebug && (
+								<AITool defaultOpen={false}>
+									<AIToolHeader
+										status={status}
+										name={toolName}
+										description={getToolDescription(toolName)}
+									/>
+									<AIToolContent>
+										{/* Messy code, need to fix this */}
+										{"input" in part &&
+											(part.input ? (
+												<AIToolParameters
+													parameters={part.input as Record<string, unknown>}
+												/>
 											) : null)}
-											{"output" in part && (part?.output ? (
-												<AIToolResult result={JSON.stringify(part.output, null, 2)} />
+										{"output" in part &&
+											(part?.output ? (
+												<AIToolResult
+													result={JSON.stringify(part.output, null, 2)}
+												/>
 											) : null)}
-											{"errorText" in part && (part.errorText ? (
+										{"errorText" in part &&
+											(part.errorText ? (
 												<AIToolResult error={part.errorText} />
 											) : null)}
-										</AIToolContent>
-									</AITool>
-								)}
+									</AIToolContent>
+								</AITool>
+							)}
 
-								{/* The actual UI components - skip for internal calls */}
-								{isCompleted && hasOutput && !isInternal && renderToolUIComponent(toolName, part.output, sendMessage)}
-							</div>
-						);
+							{/* The actual UI components - skip for internal calls */}
+							{isCompleted &&
+								hasOutput &&
+								!isInternal &&
+								renderToolUIComponent(toolName, part.output, sendMessage)}
+						</div>
+					);
 				}
 
 				return null;
@@ -127,7 +142,10 @@ function renderToolUIComponent(
 				return null;
 			}
 			return (
-					<ProductCarousel data={validationResult.data} sendMessage={sendMessage} />
+				<ProductCarousel
+					data={validationResult.data}
+					sendMessage={sendMessage}
+				/>
 			);
 		}
 
@@ -176,7 +194,12 @@ function renderToolUIComponent(
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
 				return null;
 			}
-			return <ProductDetails data={validationResult.data} sendMessage={sendMessage} />;
+			return (
+				<ProductDetails
+					data={validationResult.data}
+					sendMessage={sendMessage}
+				/>
+			);
 		}
 
 		default:
