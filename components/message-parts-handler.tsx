@@ -141,12 +141,7 @@ function renderToolUIComponent(
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
 				return null;
 			}
-			return (
-				<ProductCarousel
-					data={validationResult.data}
-					sendMessage={sendMessage}
-				/>
-			);
+			return <ProductCarousel data={validationResult.data} sendMessage={sendMessage} />;
 		}
 
 		case "search_shop_policies_and_faqs": {

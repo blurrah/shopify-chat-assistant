@@ -1,7 +1,11 @@
 import { RemoteComponent } from 'remote-components/next';
-import { Button } from '../../../components/ui/button';
+import { Button } from '../../../../components/ui/button';
 
-export default function ProductCard() {
+export default async function ProductCard({ params }: { params: Promise<{ name: string }> }) {
+    const { name } = await params;
+
+    const productData = JSON.parse(decodeURIComponent(name));
+
     return (
         <RemoteComponent name='product-card'>
             <div className="rounded-lg border p-4 hover:bg-muted/50 transition-colors h-full flex flex-col">
@@ -12,7 +16,7 @@ export default function ProductCard() {
                 />
 
                 <div className="space-y-2 flex-1 flex flex-col">
-                    <h5 className="font-medium text-sm line-clamp-2">Premium Wireless Headphones</h5>
+                    <h5 className="font-medium text-sm line-clamp-2">{productData.name}</h5>
 
                     <div className="flex items-center justify-between">
                         <span className="font-semibold text-base">
