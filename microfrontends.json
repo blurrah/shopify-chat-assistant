@@ -1,15 +1,17 @@
 {
-"$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
   "applications": {
-    "web": {
+    "shopify-chat-assistant": {
       "development": {
         "fallback": "shopify-chat-assistant.vercel.app"
       }
     },
-    "shopify-chat-assistant": {
+    "ecom-chat-components": {
       "routing": [
         {
-          "paths": ["/components/:path*"]
+          "paths": [
+            "/components/:path*"
+          ]
         }
       ]
     }
