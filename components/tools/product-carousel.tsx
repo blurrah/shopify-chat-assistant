@@ -20,7 +20,6 @@ export function ProductCarousel({
 	data: SearchShopCatalogOutput;
 	className?: string;
 	sendMessage: (message: { text: string }) => void;
-	productCarousel: React.ReactNode;
 }) {
 	const products = data.products;
 
