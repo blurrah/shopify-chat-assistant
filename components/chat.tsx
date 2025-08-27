@@ -81,7 +81,7 @@ export function Chat({ isDebug = false }: { isDebug?: boolean }) {
 				<div className="max-w-4xl mx-auto flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<h1 className="text-lg sm:text-xl font-semibold text-gray-900">
-							Shopify AI Assistant {isDebug ? "DEBUG" : ""}
+							Vercel Shopping Assistant {isDebug ? "DEBUG" : ""}
 						</h1>
 					</div>
 					<div className="flex items-center gap-4">
