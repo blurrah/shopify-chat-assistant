@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/header";
 import { VercelToolbar } from "@vercel/toolbar/next";
 
 const geistSans = Geist({
@@ -15,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Shopify AI Assistant",
-	description: "Shopify AI Assistant",
+	title: "Vercel Shopping Assistant",
+	description: "Vercel Shopping Assistant",
 };
 
 export default function RootLayout({

@@ -23,7 +23,7 @@ export function OpeningScreen({ onSubmit }: OpeningScreenProps) {
 				{/* Header */}
 				<div className="flex items-center justify-center mb-12 sm:mb-20">
 					<h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
-						Shopify AI Assistant
+						Vercel Shopping Assistant
 					</h1>
 				</div>
 
