@@ -1,6 +1,5 @@
 import { Chat } from "@/components/chat";
 import { debugFlag } from "@/lib/flags";
-import { RemoteComponent } from "remote-components/next/host";
 
 export default async function Home() {
 	// TODO: Add precompute path for static chat view
@@ -8,7 +7,6 @@ export default async function Home() {
 
 	return (
 		<div className="h-screen w-full">
-			<RemoteComponent src="/components/bla/product-details" />
 			<Chat isDebug={isDebug} />
 		</div>
 	);
