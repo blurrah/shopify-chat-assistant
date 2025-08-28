@@ -22,7 +22,7 @@ export function CartUpdate({ data, className }: CartUpdateProps) {
 	return (
 		<div data-slot="cart-update" className={cn("space-y-4", className)}>
 			<div className="flex items-center gap-2">
-				<CheckCircleIcon className="size-4 text-green-600" />
+				<CheckCircleIcon className="size-4 text-chart-2" />
 				<h4 className="font-medium text-sm">Cart Updated Successfully</h4>
 				{data.cart.total_quantity && (
 					<Badge variant="secondary">
@@ -102,10 +102,10 @@ function getActionIcon(action?: string) {
 function getActionColor(action?: string) {
 	switch (action) {
 		case "added":
-			return "text-green-600";
+			return "text-chart-2";
 		case "removed":
-			return "text-red-600";
+			return "text-destructive";
 		default:
-			return "text-blue-600";
+			return "text-primary";
 	}
 }

@@ -96,8 +96,8 @@ export function SessionList({
 						className="fixed inset-0 z-40"
 						onClick={() => setIsOpen(false)}
 					/>
-					<div className="absolute top-full left-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-						<div className="p-3 border-b border-gray-100 space-y-2">
+					<div className="absolute top-full left-0 mt-2 w-80 bg-card border border-border rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
+						<div className="p-3 border-b border-border space-y-2">
 							<Button
 								onClick={() => {
 									onNewSession();
@@ -121,7 +121,7 @@ export function SessionList({
 										}
 									}}
 									variant="outline"
-									className="w-full flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+									className="w-full flex items-center gap-2 text-destructive hover:text-destructive/90 hover:bg-destructive/10"
 									size="sm"
 								>
 									<Trash2 className="w-4 h-4" />
@@ -132,16 +132,16 @@ export function SessionList({
 
 						<div className="p-2">
 							{sessions.length === 0 ? (
-								<div className="text-center text-gray-500 py-4">
+								<div className="text-center text-muted-foreground py-4">
 									No saved chats yet
 								</div>
 							) : (
 								sessions.map((session) => (
 									<div
 										key={session.id}
-										className={`flex items-center justify-between p-2 rounded hover:bg-gray-50 cursor-pointer group ${
+										className={`flex items-center justify-between p-2 rounded hover:bg-accent cursor-pointer group ${
 											session.id === currentSessionId
-												? "bg-blue-50 border border-blue-200"
+												? "bg-accent border border-primary/20"
 												: ""
 										}`}
 										onClick={() => {
@@ -150,17 +150,17 @@ export function SessionList({
 										}}
 									>
 										<div className="flex-1 min-w-0">
-											<div className="text-sm font-medium text-gray-900 truncate">
+											<div className="text-sm font-medium text-foreground truncate">
 												{session.title}
 											</div>
-											<div className="text-xs text-gray-500">
+											<div className="text-xs text-muted-foreground">
 												{formatDate(new Date(session.lastUpdated))} •{" "}
 												{session.messages.length} messages
 											</div>
 										</div>
 										<button
 											onClick={(e) => handleDeleteSession(session.id, e)}
-											className="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-red-600 transition-all"
+											className="opacity-0 group-hover:opacity-100 p-1 text-muted-foreground hover:text-destructive transition-all"
 										>
 											<Trash2 className="w-4 h-4" />
 										</button>

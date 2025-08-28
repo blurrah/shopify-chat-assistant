@@ -101,7 +101,7 @@ export function ProductDetails({
 				{/* Product Images */}
 				<div className="space-y-4 min-w-0">
 					{/* Main Image */}
-					<div className="aspect-square w-full rounded-lg overflow-hidden bg-gray-100">
+					<div className="aspect-square w-full rounded-lg overflow-hidden bg-muted">
 						<img
 							src={
 								product.images.length > 0
@@ -129,7 +129,7 @@ export function ProductDetails({
 										className={`flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-md overflow-hidden border-2 transition-all ${
 											selectedImageIndex === index
 												? "border-primary shadow-md"
-												: "border-gray-200 hover:border-gray-400"
+												: "border-border hover:border-border/80"
 										}`}
 									>
 										<img

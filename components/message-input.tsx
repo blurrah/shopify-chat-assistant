@@ -52,21 +52,21 @@ export function MessageInput({
 	return (
 		<AIInput
 			onSubmit={handleSubmit}
-			className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-gray-200 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent"
+			className="bg-card rounded-2xl shadow-lg hover:shadow-xl transition-shadow border border-border focus-within:ring-2 focus-within:ring-ring focus-within:border-transparent"
 		>
 			<AIInputTextarea
 				onChange={(e) => setText(e.target.value)}
 				onKeyDown={handleKeyDown}
 				value={text}
 				placeholder="Ask about products, policies, or your cart..."
-				className="border-0 bg-transparent placeholder:text-gray-500 focus:ring-0 resize-none px-4 py-3 !text-[17px]"
+				className="border-0 bg-transparent placeholder:text-muted-foreground focus:ring-0 resize-none px-4 py-3 !text-[17px]"
 			/>
 			<AIInputToolbar className="border-0 bg-transparent px-2 pb-2">
 				<AIInputTools />
 				<AIInputSubmit
 					disabled={!text.trim()}
 					status={status}
-					className="bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg p-2 transition-all hover:scale-105"
+					className="bg-primary hover:bg-primary/90 disabled:bg-muted-foreground/20 disabled:cursor-not-allowed text-primary-foreground disabled:text-muted-foreground rounded-lg p-2 transition-all hover:scale-105"
 				>
 					<ArrowRight className="w-4 h-4" />
 				</AIInputSubmit>
