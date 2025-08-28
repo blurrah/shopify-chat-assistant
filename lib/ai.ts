@@ -96,9 +96,10 @@ export const model = "openai/gpt-4o";
 export const allowedOrigins = [
 	"https://shopify-chat-assistant.vercel.app",
 	"https://dev-vercel-shop.myshopify.com",
+  "https://itoen.com"
 ];
 
 export const allowedImagePrefixes = [
 	"https://dev-vercel-shop.myshopify.com",
-	"https://cdn.shopify.com",
+	"https://cdn.shopify.com"
 ];
