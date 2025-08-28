@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/lib/types";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
 	product: Product;
@@ -26,31 +27,29 @@ export function ProductCard({
 				/>
 			)}
 
-			<div className="space-y-2 flex-1 flex flex-col">
+			<div className="flex flex-1 flex-col space-y-2">
 				<h5 className="font-medium text-sm line-clamp-2">{product.title}</h5>
 
 				<div className="flex items-center justify-between">
 					<span className="font-semibold text-base">
-						Between {product.price_range?.currency || "$"}
-						{product.price_range?.min} and{" "}
-						{product.price_range?.currency || "$"}
-						{product.price_range?.max}
+						Between {formatPrice(Number(product.price_range?.min))} and{" "}
+						{formatPrice(Number(product.price_range?.max))}
 					</span>
 				</div>
 
 				{product.description && (
-					<p className="text-muted-foreground text-xs line-clamp-3">
+					<p className="line-clamp-3 text-muted-foreground text-xs">
 						{product.description}
 					</p>
 				)}
 
-				<div className="flex flex-col gap-2 mt-auto">
+				<div className="mt-auto flex flex-col gap-2">
 					{product.url && (
 						<a
 							href={product.url}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="text-primary hover:underline text-sm font-medium inline-block"
+							className="inline-block font-medium text-primary text-sm hover:underline"
 						>
 							View Product →
 						</a>
