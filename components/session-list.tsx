@@ -97,7 +97,7 @@ export function SessionList({
 						onClick={() => setIsOpen(false)}
 					/>
 					<div className="absolute top-full left-0 mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-						<div className="p-3 border-b border-gray-100">
+						<div className="p-3 border-b border-gray-100 space-y-2">
 							<Button
 								onClick={() => {
 									onNewSession();
@@ -109,6 +109,25 @@ export function SessionList({
 								<Plus className="w-4 h-4" />
 								New Chat
 							</Button>
+							{sessions.length > 0 && (
+								<Button
+									onClick={async () => {
+										if (confirm("Are you sure you want to clear all chat history?")) {
+											const { chatStorage } = await import("@/lib/chat-storage");
+											await chatStorage.clearAllSessions();
+											setSessions([]);
+											onNewSession();
+											setIsOpen(false);
+										}
+									}}
+									variant="outline"
+									className="w-full flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+									size="sm"
+								>
+									<Trash2 className="w-4 h-4" />
+									Clear All Chats
+								</Button>
+							)}
 						</div>
 
 						<div className="p-2">
