@@ -6,7 +6,6 @@ import { allowedImagePrefixes, allowedOrigins } from "@/lib/ai";
 const HardenedMarkdown = hardenReactMarkdown(ReactMarkdown);
 
 export function Markdown({ children }: { children: string }) {
-	console.log("markdown", children);
 	return (
 		<HardenedMarkdown
 			defaultOrigin="https://shopify-chat-assistant.vercel.app"

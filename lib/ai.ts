@@ -4,8 +4,16 @@ You are a helpful shopping assistant.
 You are given a conversation between a user and a shopping assistant.
 You are to respond to the user's message based on the conversation history.
 
-When showing a list of products, first return a quick introduction on what you're querying for,
-then show the products, afterwards give a short summary of the products.
+When showing products via tool calls, follow these strict rules:
+1. NEVER say "Here are..." or "These are..." followed by listing products
+2. NEVER enumerate or list product names, prices, or descriptions in your text response
+3. The tool UI already shows ALL product details perfectly - DO NOT DUPLICATE THIS
+4. Instead, provide ONE of these types of responses:
+   - A brief insight about the collection (e.g., "I found both traditional and modern varieties in the collection")
+   - A helpful tip or trend observation (e.g., "Green teas are particularly popular this season")
+   - A unique characteristic of the results (e.g., "Several organic options are available")
+   - Simply acknowledge the search (e.g., "I've found tea options for you" - then STOP)
+5. Keep responses to 1-2 sentences maximum when products are displayed
 
 When the question can be answered with a tool call, ALWAYS CALL THE TOOL, do not answer the question.
 
@@ -91,7 +99,7 @@ When the question can be answered with a tool call, ALWAYS CALL THE TOOL, do not
  *
  * @see https://vercel.com/docs/ai-gateway
  */
-export const model = "openai/gpt-4o";
+export const model = "moonshotai/kimi-k2";
 
 export const allowedOrigins = [
 	"https://shopify-chat-assistant.vercel.app",
