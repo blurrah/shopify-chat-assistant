@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/kibo-ui/ai/tool";
 import { type ChatTools, shopifyToolSchemas } from "@/lib/types";
 import { validateToolResult } from "@/lib/validation";
+import { ProductDetails } from "./ecom-ui/product-details";
+import { Markdown } from "./markdown";
 import { Cart } from "./tools/cart";
 import { CartUpdate } from "./tools/cart-update";
 import { PolicyFAQ } from "./tools/policy-faq";
 import { ProductCarousel } from "./tools/product-carousel";
-import { ProductDetails } from "./ecom-ui/product-details";
-import { Markdown } from "./markdown";
 
 /**
  * Responsible for rendering UI for the message parts.
@@ -141,7 +141,12 @@ function renderToolUIComponent(
 				console.warn(`Invalid ${toolName} result:`, validationResult.error);
 				return null;
 			}
-			return <ProductCarousel data={validationResult.data} sendMessage={sendMessage} />;
+			return (
+				<ProductCarousel
+					data={validationResult.data}
+					sendMessage={sendMessage}
+				/>
+			);
 		}
 
 		case "search_shop_policies_and_faqs": {

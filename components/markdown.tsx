@@ -1,5 +1,5 @@
-import ReactMarkdown from "react-markdown";
 import hardenReactMarkdown from "harden-react-markdown";
+import ReactMarkdown from "react-markdown";
 import { allowedImagePrefixes, allowedOrigins } from "@/lib/ai";
 
 // Uses harden-react-markdown to prevent prompt injection and other attack vectors
@@ -27,8 +27,8 @@ export function Markdown({ children }: { children: string }) {
 				},
 				// We are already showing the images in the product carousel, so we don't need to show them here
 				// trying to prompt them away but no luck yet
-				img: ({ src, alt }) => {
-					return <span className="block my-4" />;
+				img: () => {
+					return <span className="my-4 block" />;
 				},
 			}}
 		>
