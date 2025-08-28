@@ -1,7 +1,7 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
 	AIConversation,
 	AIConversationContent,
@@ -11,12 +11,12 @@ import {
 	AIMessage,
 	AIMessageContent,
 } from "@/components/ui/kibo-ui/ai/message";
+import { useChatPersistence } from "@/hooks/use-chat-persistence";
 import type { ChatMessage } from "@/lib/types";
 import { MessageInput } from "./message-input";
 import { MessagePartsHandler } from "./message-parts-handler";
 import { OpeningScreen } from "./opening-screen";
 import { SessionList } from "./session-list";
-import { useChatPersistence } from "@/hooks/use-chat-persistence";
 
 export function Chat({ isDebug = false }: { isDebug?: boolean }) {
 	const { messages, sendMessage, status, setMessages } = useChat<ChatMessage>();

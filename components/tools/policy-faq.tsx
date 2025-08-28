@@ -1,11 +1,11 @@
 "use client";
 
+import { FileTextIcon, HelpCircleIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { HelpCircleIcon, FileTextIcon } from "lucide-react";
 import type { SearchShopPoliciesFAQsOutput } from "@/lib/types";
-import { safeValidateToolResult } from "@/lib/validation";
 import { shopifyToolSchemas } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import { safeValidateToolResult } from "@/lib/validation";
 
 interface PolicyFAQProps {
 	data: unknown;

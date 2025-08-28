@@ -1,20 +1,20 @@
-import { after, type NextRequest } from "next/server";
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import {
 	convertToModelMessages,
+	experimental_createMCPClient as createMCPClient,
 	createUIMessageStream,
 	JsonToSseTransformStream,
 	stepCountIs,
 	streamText,
 } from "ai";
-import { experimental_createMCPClient as createMCPClient } from "ai";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { systemPrompt } from "@/lib/ai";
-import { z } from "zod";
+import { nanoid } from "nanoid";
+import { after, type NextRequest } from "next/server";
 import {
 	createResumableStreamContext,
 	type ResumableStreamContext,
 } from "resumable-stream";
-import { nanoid } from "nanoid";
+import { z } from "zod";
+import { systemPrompt } from "@/lib/ai";
 
 export const maxDuration = 60;
 

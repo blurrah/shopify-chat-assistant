@@ -1,10 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { GetProductDetailsOutput } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 interface ProductDetailsProps {
 	data: GetProductDetailsOutput;

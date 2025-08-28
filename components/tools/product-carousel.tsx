@@ -1,5 +1,6 @@
 "use client";
 
+import { ProductCard } from "@/components/ecom-ui/product-card";
 import { Badge } from "@/components/ui/badge";
 import {
 	Carousel,
@@ -8,7 +9,6 @@ import {
 	CarouselNext,
 	CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ProductCard } from "@/components/ecom-ui/product-card";
 import type { SearchShopCatalogOutput } from "@/lib/types";
 import { cn } from "@/lib/utils";
 

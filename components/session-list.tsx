@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { MessageSquare, Trash2, Plus } from "lucide-react";
-import type { ChatSession } from "@/lib/chat-storage";
-import { useChatPersistence } from "@/hooks/use-chat-persistence";
+import { MessageSquare, Plus, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useChatPersistence } from "@/hooks/use-chat-persistence";
+import type { ChatSession } from "@/lib/chat-storage";
 
 interface SessionListProps {
 	currentSessionId: string;

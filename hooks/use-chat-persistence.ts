@@ -1,6 +1,6 @@
-import { useEffect, useCallback, useState } from "react";
-import type { ChatMessage } from "@/lib/types";
+import { useCallback, useEffect, useState } from "react";
 import { chatStorage } from "@/lib/chat-storage";
+import type { ChatMessage } from "@/lib/types";
 
 const CURRENT_SESSION_KEY = "current-chat-session-id";
 

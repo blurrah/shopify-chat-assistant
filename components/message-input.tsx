@@ -1,7 +1,7 @@
 "use client";
 import type { UseChatHelpers } from "@ai-sdk/react";
-import { type FormEventHandler, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { type FormEventHandler, useState } from "react";
 import {
 	AIInput,
 	AIInputSubmit,
