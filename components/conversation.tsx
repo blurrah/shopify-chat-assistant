@@ -1,18 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ArrowDownIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { useCallback } from "react";
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export type AIConversationProps = ComponentProps<typeof StickToBottom>;
+export type ConversationProps = ComponentProps<typeof StickToBottom>;
 
-export const AIConversation = ({
-	className,
-	...props
-}: AIConversationProps) => (
+export const Conversation = ({ className, ...props }: ConversationProps) => (
 	<StickToBottom
 		className={cn("relative flex-1 overflow-y-auto", className)}
 		initial="smooth"
@@ -22,18 +19,23 @@ export const AIConversation = ({
 	/>
 );
 
-export type AIConversationContentProps = ComponentProps<
+export type ConversationContentProps = ComponentProps<
 	typeof StickToBottom.Content
 >;
 
-export const AIConversationContent = ({
+export const ConversationContent = ({
 	className,
 	...props
-}: AIConversationContentProps) => (
+}: ConversationContentProps) => (
 	<StickToBottom.Content className={cn("p-4", className)} {...props} />
 );
 
-export const AIConversationScrollButton = () => {
+export type ConversationScrollButtonProps = ComponentProps<typeof Button>;
+
+export const ConversationScrollButton = ({
+	className,
+	...props
+}: ConversationScrollButtonProps) => {
 	const { isAtBottom, scrollToBottom } = useStickToBottomContext();
 
 	const handleScrollToBottom = useCallback(() => {
@@ -43,11 +45,15 @@ export const AIConversationScrollButton = () => {
 	return (
 		!isAtBottom && (
 			<Button
-				className="absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full"
+				className={cn(
+					"absolute bottom-4 left-[50%] translate-x-[-50%] rounded-full",
+					className,
+				)}
 				onClick={handleScrollToBottom}
 				size="icon"
 				type="button"
 				variant="outline"
+				{...props}
 			>
 				<ArrowDownIcon className="size-4" />
 			</Button>

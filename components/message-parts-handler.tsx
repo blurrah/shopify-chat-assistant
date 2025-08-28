@@ -2,12 +2,12 @@
 
 import type { UIDataTypes, UIMessagePart } from "ai";
 import {
-	AITool,
-	AIToolContent,
-	AIToolHeader,
-	AIToolParameters,
-	AIToolResult,
-} from "@/components/ui/kibo-ui/ai/tool";
+	Tool,
+	ToolContent,
+	ToolHeader,
+	ToolInput,
+	ToolOutput,
+} from "@/components/tool";
 import { type ChatTools, shopifyToolSchemas } from "@/lib/types";
 import { validateToolResult } from "@/lib/validation";
 import { ProductDetails } from "./ecom-ui/product-details";
@@ -70,32 +70,32 @@ export function MessagePartsHandler({
 						<div key={index}>
 							{/* Used for debugging tool calls */}
 							{isDebug && (
-								<AITool defaultOpen={false}>
-									<AIToolHeader
-										status={status}
-										name={toolName}
-										description={getToolDescription(toolName)}
-									/>
-									<AIToolContent>
+								<Tool defaultOpen={false}>
+									<ToolHeader state={part.state} type={`tool-${toolName}`} />
+									<ToolContent>
 										{/* Messy code, need to fix this */}
 										{"input" in part &&
 											(part.input ? (
-												<AIToolParameters
-													parameters={part.input as Record<string, unknown>}
+												<ToolInput
+													input={part.input as Record<string, unknown>}
 												/>
 											) : null)}
 										{"output" in part &&
 											(part?.output ? (
-												<AIToolResult
-													result={JSON.stringify(part.output, null, 2)}
+												<ToolOutput
+													output={JSON.stringify(part.output, null, 2)}
+													errorText={undefined}
 												/>
 											) : null)}
 										{"errorText" in part &&
 											(part.errorText ? (
-												<AIToolResult error={part.errorText} />
+												<ToolOutput
+													errorText={part.errorText}
+													output={undefined}
+												/>
 											) : null)}
-									</AIToolContent>
-								</AITool>
+									</ToolContent>
+								</Tool>
 							)}
 
 							{/* The actual UI components - skip for internal calls */}
@@ -111,18 +111,6 @@ export function MessagePartsHandler({
 			})}
 		</div>
 	);
-}
-
-function getToolDescription(toolName: string): string {
-	const descriptions: Record<string, string> = {
-		search_shop_catalog: "Searching product catalog",
-		search_shop_policies_and_faqs: "Looking up store policies and FAQs",
-		get_cart: "Retrieving cart contents",
-		update_cart: "Updating cart items",
-		get_product_details: "Getting product details",
-	};
-
-	return descriptions[toolName] || "Running tool";
 }
 
 function renderToolUIComponent(

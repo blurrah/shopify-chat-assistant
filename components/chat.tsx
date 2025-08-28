@@ -2,17 +2,14 @@
 
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useState } from "react";
-import {
-	AIConversation,
-	AIConversationContent,
-	AIConversationScrollButton,
-} from "@/components/ui/kibo-ui/ai/conversation";
-import {
-	AIMessage,
-	AIMessageContent,
-} from "@/components/ui/kibo-ui/ai/message";
 import { useChatPersistence } from "@/hooks/use-chat-persistence";
 import type { ChatMessage } from "@/lib/types";
+import {
+	Conversation,
+	ConversationContent,
+	ConversationScrollButton,
+} from "./conversation";
+import { Message, MessageContent } from "./message";
 import { MessageInput } from "./message-input";
 import { MessagePartsHandler } from "./message-parts-handler";
 import { OpeningScreen } from "./opening-screen";
@@ -98,26 +95,26 @@ export function Chat({ isDebug = false }: { isDebug?: boolean }) {
 			</header>
 
 			{/* Chat Content */}
-			<AIConversation className="flex-1 relative">
-				<AIConversationContent className="max-w-4xl mx-auto px-4 sm:px-6">
+			<Conversation className="flex-1 relative">
+				<ConversationContent className="max-w-4xl mx-auto px-4 sm:px-6">
 					{messages.map((message) => (
-						<AIMessage
+						<Message
 							from={message.role === "system" ? "assistant" : message.role}
 							key={message.id}
 							className="[&:has([data-slot='carousel'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='product-details'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='cart-update'])>div]:max-w-[calc(100%-2rem)] [&:has([data-slot='cart-update'])>div]:sm:w-[calc(80%-2rem)]"
 						>
-							<AIMessageContent>
+							<MessageContent>
 								<MessagePartsHandler
 									parts={message.parts}
 									sendMessage={sendMessage}
 									isDebug={isDebug}
 								/>
-							</AIMessageContent>
-						</AIMessage>
+							</MessageContent>
+						</Message>
 					))}
-				</AIConversationContent>
-				<AIConversationScrollButton />
-			</AIConversation>
+				</ConversationContent>
+				<ConversationScrollButton />
+			</Conversation>
 
 			{/* Footer */}
 			<footer className="px-4 sm:px-6 pb-6">
