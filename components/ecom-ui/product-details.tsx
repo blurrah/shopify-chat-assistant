@@ -47,11 +47,11 @@ export function ProductDetails({
 
 	return (
 		<div
-			className={cn("space-y-6 w-full max-w-4xl mx-auto px-4", className)}
+			className={cn("space-y-6 w-full max-w-4xl mx-auto", className)}
 			data-slot="product-details"
 		>
-			{/* Product Header */}
-			<div className="space-y-2">
+			<div className="border-b border-border pb-6">
+				{/* Product Header - Title Only */}
 				<h2 className="text-2xl font-bold">
 					<a
 						href={product.url}
@@ -62,46 +62,12 @@ export function ProductDetails({
 						{product.title}
 					</a>
 				</h2>
-				<div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-					<div className="text-2xl font-bold">
-						{formatPrice(
-							product.selectedOrFirstAvailableVariant.price,
-							product.selectedOrFirstAvailableVariant.currency,
-						)}
-					</div>
-					{product.price_range.min !== product.price_range.max && (
-						<div className="text-muted-foreground text-sm">
-							Range:{" "}
-							{formatPrice(
-								product.price_range.min,
-								product.price_range.currency,
-							)}{" "}
-							-{" "}
-							{formatPrice(
-								product.price_range.max,
-								product.price_range.currency,
-							)}
-						</div>
-					)}
-					<Badge
-						variant={
-							product.selectedOrFirstAvailableVariant.available
-								? "default"
-								: "secondary"
-						}
-					>
-						{product.selectedOrFirstAvailableVariant.available
-							? "In Stock"
-							: "Out of Stock"}
-					</Badge>
-				</div>
-			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 min-w-0">
 				{/* Product Images */}
 				<div className="space-y-4 min-w-0">
 					{/* Main Image */}
-					<div className="aspect-square w-full rounded-lg overflow-hidden bg-muted">
+					<div className="aspect-square w-full max-w-sm mx-auto md:max-w-none rounded-lg overflow-hidden bg-muted">
 						<img
 							src={
 								product.images.length > 0
@@ -121,7 +87,7 @@ export function ProductDetails({
 					{/* Thumbnail Navigation */}
 					{product.images.length > 1 && (
 						<div className="min-w-0">
-							<div className="flex gap-2 overflow-x-auto pb-2">
+							<div className="flex gap-2 overflow-x-auto">
 								{product.images.map((image, index) => (
 									<button
 										key={index}
@@ -184,8 +150,25 @@ export function ProductDetails({
 						</div>
 					)}
 
-					{/* Action Buttons */}
-					<div className="space-y-3">
+					{/* Pricing and Action Buttons */}
+					<div className="space-y-4">
+						{/* Pricing Section */}
+						<div className="flex items-baseline gap-3">
+							<div className="text-2xl font-bold">
+								{formatPrice(
+									product.selectedOrFirstAvailableVariant.price,
+									product.selectedOrFirstAvailableVariant.currency,
+								)}
+							</div>
+							<span className="text-sm text-muted-foreground">
+								{product.selectedOrFirstAvailableVariant.available
+									? "In stock"
+									: "Out of stock"}
+							</span>
+						</div>
+
+						{/* Action Buttons */}
+						<div className="space-y-3">
 						<Button
 							size="lg"
 							className="w-full"
@@ -212,8 +195,10 @@ export function ProductDetails({
 						>
 							Find Similar Products
 						</Button>
+						</div>
 					</div>
 				</div>
+			</div>
 			</div>
 		</div>
 	);
